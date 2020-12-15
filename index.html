@@ -16,9 +16,8 @@
   const svg1=document.querySelector('#svgField');
 
   const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  text1.setAttribute('x','50%');
+  text1.setAttribute('x','50');
   text1.setAttribute('y','160');
-  text1.setAttribute('text-anchor','middle');
   text1.setAttribute('font-size',"20px");
   text1.setAttribute('fill',"white");
   text1.setAttribute('font-family',"Verdana");
@@ -31,8 +30,8 @@
   var bBox = text1.getBBox();
 
   const box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  box.setAttribute('x',bBox.x-25);
-  box.setAttribute('y',bBox.y-22);
+  box.setAttribute('x',25);
+  box.setAttribute('y',120);
   box.setAttribute('height','70');
   box.setAttribute('width','240');
   box.setAttribute('fill','#1FCEB4');
