@@ -153,10 +153,10 @@
         //前の問題の要素を取り除く
 
         setTimeout(()=>{stage+=1;
-                question(stage);
                 if(stage>=9){
-                  stage=0;
-                }
+                        stage=0;
+                      };
+                question(stage);
                 svg1.removeChild(text1);
                 svg1.removeChild(box);s
                 vg1.removeChild(saiten1);
