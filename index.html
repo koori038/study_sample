@@ -4,181 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>クリックで色変更</title>
+  <title>勉強講座　初級</title>
   <style>
   </style>
-  <svg id="svgField" width="100%" height="300" style="border:1px solid black">
+  <svg id="svgField" width="100%" height="300" style="border:0px solid black">
   </svg>
 </head>
 <body>
 
   <script>
-  var bar=[];
-  var tex=[];
-  var click_1=[];
-  var click_2=[];
-  var click_3=[];
-  var click_4=[];
-  var click_5=[];
-  var text_1="　1．ここではにんじんやたまねぎなどをかいました。";
-
-  var text_length_1=21;
-  var answer_1=[0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0];
-
-  for(var i=0;i<text_length_1;i++){
-    click_1[i]=0;
-  }
-
-  function check(){
-    box.setAttribute('fill','Yellow');
-    for(var l=0;l<text_length_1;l++){
-      if(click_1[l]!=answer_1[l]){
-        cross1_1.setAttribute('opacity',1);
-        cross1_2.setAttribute('opacity',1);
-        circle1.setAttribute('opacity',0);
-        break;
-      }
-    }
-    if(l==text_length_1){
-      circle1.setAttribute('opacity',1);
-      cross1_1.setAttribute('opacity',0);
-      cross1_2.setAttribute('opacity',0);
-    }
-  };
-
-  for(var c=0;c<text_length_1;c++){
-    const bar1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    bar1.setAttribute('x',20*(c+1)+61);
-    bar1.setAttribute('y',300/2-22);
-    bar1.setAttribute('height','30');
-    bar1.setAttribute('width','2');
-    bar1.setAttribute('fill','whitesmoke');
-    bar[c]=bar1;
-  }
-
-  const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  text1.setAttribute('x','10');
-  text1.setAttribute('y',300/2);
-  text1.setAttribute('font-size',"20px");
-  text1.textContent=text_1;
-
-  const circle1=document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  circle1.setAttribute('cx',35);
-  circle1.setAttribute('cy',142);
-  circle1.setAttribute('r','15');
-  circle1.setAttribute('stroke','hotpink');
-  circle1.setAttribute('stroke-width',8);
-  circle1.setAttribute('fill','transparent');
-  circle1.setAttribute('opacity',0);
-
-  const cross1_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  cross1_1.setAttribute('x',18);
-  cross1_1.setAttribute('y',135);
-  cross1_1.setAttribute('height','35');
-  cross1_1.setAttribute('width','10');
-  cross1_1.setAttribute('fill','royalblue');
-  cross1_1.setAttribute("transform", "rotate(-45,18,135)");
-  cross1_1.setAttribute('opacity',0);
-  const cross1_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  cross1_2.setAttribute('x',42);
-  cross1_2.setAttribute('y',128);
-  cross1_2.setAttribute('height','35');
-  cross1_2.setAttribute('width','10');
-  cross1_2.setAttribute('fill','royalblue');
-  cross1_2.setAttribute("transform", "rotate(45,42,128)");
-  cross1_2.setAttribute('opacity',0);
-
-
-
-  const box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  box.setAttribute('x',530);
-  box.setAttribute('y',132);
-  box.setAttribute('height','20');
-  box.setAttribute('width','20');
-  box.setAttribute('fill','blue');
-  box.onclick = function(){
-    check();
-  };
-  const saiten1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  saiten1.setAttribute('x','555');
-  saiten1.setAttribute('y',148);
-  saiten1.setAttribute('font-size',"15px");
-  saiten1.textContent='チェック';
-
   const svg1=document.querySelector('#svgField');
 
-  for(var j=0;j<text_length_1;j++){
-    svg1.appendChild(bar[j]);
-  }
-  var tmp=[text1]
-  svg1.appendChild(tmp[0]);
+  const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  text1.setAttribute('x','50%');
+  text1.setAttribute('y','160');
+  text1.setAttribute('text-anchor','middle');
+  text1.setAttribute('font-size',"20px");
+  text1.setAttribute('fill',"white");
+  text1.setAttribute('font-family',"Verdana");
+  text1.onclick = function(){
+    location.href = "stage_1.html";
+  };
+  text1.textContent='勉強講座 を はじめる';
+  svg1.appendChild(text1);
 
+  var bBox = text1.getBBox();
+
+  const box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  box.setAttribute('x',bBox.x-25);
+  box.setAttribute('y',bBox.y-22);
+  box.setAttribute('height','70');
+  box.setAttribute('width','240');
+  box.setAttribute('fill','#1FCEB4');
+  box.setAttribute('rx','15');
+  box.setAttribute('ry','15');
+  box.onclick = function(){
+    location.href = "stage_1.html";
+  };
   svg1.appendChild(box);
-  svg1.appendChild(circle1);
-  svg1.appendChild(cross1_1);
-  svg1.appendChild(cross1_2);
-  svg1.appendChild(saiten1);
+  svg1.appendChild(text1);
 
-  document.addEventListener("mousemove", mouseMoveHandler, false);
-  function mouseMoveHandler(e) {
-      var relativeX = e.clientX-60;
-      var mouse_location = parseInt(relativeX/20);
-      if(click_1[mouse_location-1]==0){
-        bar[mouse_location-1].setAttribute('fill','lightsteelblue');
-      }
-      if(click_1[mouse_location]==0 && mouse_location<text_length_1){
-        bar[parseInt(relativeX/20)].setAttribute('fill','whitesmoke');
-      }
-      if(click_1[mouse_location-2]==0){
-        bar[parseInt(relativeX/20)-2].setAttribute('fill','whitesmoke');
-      }
+
+  box.onmouseover = changeHoverColor;
+  box.onmouseout = changeDefaultColor;
+  text1.onmouseover = changeHoverColor;
+
+
+  function changeHoverColor() {
+      box.setAttribute('fill', 'pink');
   }
+  function changeDefaultColor() {
+    box.setAttribute('fill', '#1FCEB4');
+    }
 
-  document.addEventListener("mousedown", mouseDownHandler, false);
-  function mouseDownHandler(e) {
-      var relativeX = e.clientX-60;
-      var relativeY = e.clientY;
-      var click_location = parseInt(relativeX/20)-1;
-      if(relativeY > 300/2-22 && relativeY < 300/2+22){
-          click_1[click_location]=Math.abs(1-click_1[click_location]);
-          if(click_1[click_location]==1){
-            bar[click_location].setAttribute('fill','black');
-          }
-          else{
-            bar[click_location].setAttribute('fill','whitesmoke');
-          }
-      }
-  }
-
-  /*
-  <text x="0" y="35" font-family="Verdana" font-size="35">
-    Hello, out there
-  </text>
-<rect id="myBox" x="0" y="0" fill="red" width="100" height="80" />
-*/
-/*
-  var col=0;
-    document.getElementById('box1').onclick = function(){
-      if(col==0){
-      document.getElementById('box1').style.backgroundColor = "Blue";
-      col=1;
-    }
-    else{
-      document.getElementById('box1').style.backgroundColor = "Yellow";
-      col=0;
-    }
-    };
-    bar[j].onclick = function(){
-      if(click[j]==0){
-      bar[j].setAttribute('fill','Blue');
-      click[j]=1;
-    }
-    else{
-      bar[j].setAttribute('fill','Yellow');
-      click[j]=0;
-    }
-    };
-*/
   </script>
 </body>
 </html>
