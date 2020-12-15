@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>stage_1 文節区切り</title>
+  <style>
+  </style>
+  <svg id="svgField" width="100%" height="500" style="border:0px solid black">
+  </svg>
+</head>
+<body>
+
+  <script>
+  var stage = 0;
+  var score = 0;
+  const svg1=document.querySelector('#svgField');
+
+  const text = ["　1．ここではにんじんやたまねぎなどをかいました。",
+              "　2．おかあさんはおはなをもらいました。",
+              "　3．ここがわたしのおうちです。",
+              "　4．まどのそとをみてください。",
+              "　5．ぼくはさんじのおやつをたべました。",
+              "　6．ともだちのおとうさんがテニスをしています。",
+              "　7．あなたはわたしのともだちです。",
+              "　8．ぼくのフォークをとってください。",
+              "　9．あなたのおじいちゃんはおどりがとくいです。"
+              ]
+  const answer = [[0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0],
+  [0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0],
+  [0,0,1,0,0,0,1,0,0,0,0,0,0],
+  [0,0,1,0,0,1,0,0,0,0,0,0,0],
+  [0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
+  [0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
+  [0,0,0,1,0,0,0,1,0,0,0,0,0,0,0],
+  [0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0],
+  [0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]
+  ]
+
+  function question(stage){
+    var bar=[];
+    var click_1=[];
+    var text_1=text[stage];
+    var text_length_1=text_1.length-4;
+    var answer_1=answer[stage];
+    for(var i=0;i<text_length_1;i++){
+      click_1[i]=0;
+    }
+
+    //バー作成
+    for(var c=0;c<text_length_1;c++){
+      const bar1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      bar1.setAttribute('x',20*(c+1)+61);
+      bar1.setAttribute('y',300/2-22);
+      bar1.setAttribute('height','30');
+      bar1.setAttribute('width','2');
+      bar1.setAttribute('fill','whitesmoke');
+      bar[c]=bar1;
+    }
+
+    //テキスト作成
+    const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text1.setAttribute('x','10');
+    text1.setAttribute('y',300/2);
+    text1.setAttribute('font-size',"20px");
+    text1.textContent=text_1;
+
+    //バー配置
+    for(var j=0;j<text_length_1;j++){
+      svg1.appendChild(bar[j]);
+    }
+
+    //テキスト配置
+    svg1.appendChild(text1);
+
+    //採点機能
+    function check(){
+      for(var l=0;l<text_length_1;l++){
+        if(click_1[l]!=answer_1[l]){
+          cross1_1.setAttribute('opacity',1);
+          cross1_2.setAttribute('opacity',1);
+          circle1.setAttribute('opacity',0);
+          break;
+        }
+      }
+      if(l==text_length_1){
+        cross1_1.setAttribute('opacity',0);
+        cross1_2.setAttribute('opacity',0);
+
+        //○を出す
+        let x0 = text_length_1*10+40;
+        let y0 = 137;
+        let rx = 40; //x軸半径
+        let ry = 40; //y軸半径
+        let rad1 = Math.PI*3/2;
+        let rad2 = Math.PI*3/2;
+        let x1 = x0+rx*Math.cos(rad1); //始点
+        let y1 = y0-ry*Math.sin(rad1); //始点
+
+        let start = 0; //傾き
+        let f1 = 0;  //0:180度以内の円　1:180度以上の円
+
+        let f2 = 0;  //0:時計回り　1:反時計回り
+        let x2 = x0+rx*Math.cos(rad2); //終点
+        let y2 = y0-ry*Math.sin(rad2);  //終点
+        let arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+
+        const ark1=document.createElementNS("http://www.w3.org/2000/svg", "path");
+        ark1.setAttribute('d',arc_setting);
+        ark1.setAttribute('stroke','#3cb371');
+        ark1.setAttribute('fill','None');
+        ark1.setAttribute('stroke-width','8px');
+        ark1.setAttribute('stroke-linecap','round');
+        svg1.appendChild(ark1);
+
+        function draw_arc(rad){
+          if(rad1<=Math.PI/2*(-1)+0.15){
+            clearInterval(ID);
+            let line_x0 = x0-15;
+            let line_y0 = y0-3;
+            let line_x1 = x0;
+            let line_y1 = y0+15;
+            let line_x2 = x0+15;
+            let line_y2 = y0-12;
+            let point_setting = String(line_x0)+','+String(line_y0)+' '+String(line_x1)+','+String(line_y1)+' '+String(line_x2)+','+String(line_y2);
+            const line=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+            line.setAttribute('stroke','#3cb371');
+            line.setAttribute('fill','None');
+            line.setAttribute('points',point_setting);
+            line.setAttribute('stroke-width','8px');
+            line.setAttribute('stroke-linejoin','round');//round or bevel
+            line.setAttribute('stroke-linecap','round');
+            svg1.appendChild(line);
+            setTimeout(()=>{svg1.removeChild(line);svg1.removeChild(ark1);},1200)
+          }
+          rad1=rad
+          x1 = x0+rx*Math.cos(rad1); //始点
+          y1 = y0-ry*Math.sin(rad1); //始点
+          if(rad2-rad1>=Math.PI){
+            f1=1;
+          }
+          arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+
+          ark1.setAttribute('d',arc_setting);
+
+        }
+        var ID = setInterval(()=>{rad1-=0.1;draw_arc(rad1);},6);
+        //○を出す終わり
+
+        score+=1;
+        score_text.textContent='SCORE '+ String(score);
+        //前の問題の要素を取り除く
+
+        setTimeout(()=>{stage+=1;question(stage);svg1.removeChild(text1);svg1.removeChild(box);svg1.removeChild(saiten1);
+                for(var k=0;k<text_length_1;k++){
+                  svg1.removeChild(bar[k]);
+                }},1600)
+        //question(stage);
+      }
+    }
+    //採点ボックス生成
+    const box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    box.setAttribute('x',text_length_1*20+100);
+    box.setAttribute('y',122);
+    box.setAttribute('height','40');
+    box.setAttribute('width','90');
+    box.setAttribute('fill','#1FCEB4');
+    box.setAttribute('rx',15);
+    box.setAttribute('ry',15);
+    box.onclick = function(){
+      check();
+    };
+    svg1.appendChild(box);
+
+    const saiten1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    saiten1.setAttribute('x',text_length_1*20+115);
+    saiten1.setAttribute('y',148);
+    saiten1.setAttribute('font-size',"15px");
+    saiten1.setAttribute('fill',"white");
+    saiten1.setAttribute('font-family',"Verdana");
+    saiten1.onclick = function(){
+      check();
+    };
+    saiten1.textContent='チェック';
+    svg1.appendChild(saiten1);
+
+    document.addEventListener("mousemove", mouseMoveHandler, false);
+    function mouseMoveHandler(e) {
+        var relativeX = e.clientX-60;
+        var mouse_location = parseInt(relativeX/20);
+        if(click_1[mouse_location-1]==0){
+          bar[mouse_location-1].setAttribute('fill','lightsteelblue');
+        }
+        if(click_1[mouse_location]==0 && mouse_location<text_length_1){
+          bar[parseInt(relativeX/20)].setAttribute('fill','whitesmoke');
+        }
+        if(click_1[mouse_location-2]==0){
+          bar[parseInt(relativeX/20)-2].setAttribute('fill','whitesmoke');
+        }
+    }
+
+    document.addEventListener("mousedown", mouseDownHandler, false);
+    function mouseDownHandler(e) {
+        var relativeX = e.clientX-60;
+        var relativeY = e.clientY;
+        var click_location = parseInt(relativeX/20)-1;
+        if(relativeY > 300/2-22 && relativeY < 300/2+22){
+            click_1[click_location]=Math.abs(1-click_1[click_location]);
+            if(click_1[click_location]==1){
+              bar[click_location].setAttribute('fill','black');
+            }
+            else{
+              bar[click_location].setAttribute('fill','whitesmoke');
+            }
+        }
+    }
+
+
+  }
+
+
+
+
+
+
+  //○と×生成
+
+
+  const cross1_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  cross1_1.setAttribute('x',18);
+  cross1_1.setAttribute('y',135);
+  cross1_1.setAttribute('height','35');
+  cross1_1.setAttribute('width','10');
+  cross1_1.setAttribute('fill','royalblue');
+  cross1_1.setAttribute("transform", "rotate(-45,18,135)");
+  cross1_1.setAttribute('opacity',0);
+  const cross1_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  cross1_2.setAttribute('x',42);
+  cross1_2.setAttribute('y',128);
+  cross1_2.setAttribute('height','35');
+  cross1_2.setAttribute('width','10');
+  cross1_2.setAttribute('fill','royalblue');
+  cross1_2.setAttribute("transform", "rotate(45,42,128)");
+  cross1_2.setAttribute('opacity',0);
+
+
+  svg1.appendChild(cross1_1);
+  svg1.appendChild(cross1_2);
+
+
+
+
+  //時計機能
+  const timer_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  timer_text.setAttribute('x','20');
+  timer_text.setAttribute('y','30');
+  timer_text.setAttribute('font-size',"15px");
+  timer_text.textContent='TIME 05:00';
+  timer_text.setAttribute('font-family',"Verdana");
+  svg1.appendChild(timer_text);
+
+  var total_time = 6000; //残り時間5分
+  var old_time = Date.now();
+
+  const timerId = setInterval(()=>{
+    const current_time = Date.now();
+    const diff = current_time-old_time;
+    old_time = current_time;
+    total_time = total_time - diff;
+    const remain_min = Math.floor(total_time / 60000);
+    const remain_sec = Math.floor((total_time - remain_min*60000) / 1000);
+    if(remain_sec<10){
+      timer_text.textContent='TIME 0'+String(remain_min)+':0'+String(remain_sec);
+    }
+    else{
+      timer_text.textContent='TIME 0'+String(remain_min)+':'+String(remain_sec);
+    }
+    if(total_time<=0){
+      clearInterval(timerId);
+      //TimeUp表示
+      const timeup_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      timeup_box.setAttribute('x','0');
+      timeup_box.setAttribute('y','100');
+      timeup_box.setAttribute('height','100');
+      timeup_box.setAttribute('width','100%');
+      timeup_box.setAttribute('fill','white');
+      svg1.appendChild(timeup_box);
+
+      const timeup_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      timeup_text.setAttribute('x','100');
+      timeup_text.setAttribute('y','150');
+      timeup_text.setAttribute('font-size',"30px");
+      timeup_text.setAttribute('fill',"pink");
+      timeup_text.setAttribute('font-family',"Verdana");
+      timeup_text.textContent='TIME UP!';
+      svg1.appendChild(timeup_text);
+
+
+      //ステージ移動ボタン生成
+      const move_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      move_box.setAttribute('x','70');
+      move_box.setAttribute('y','240');
+      move_box.setAttribute('height','70');
+      move_box.setAttribute('width','200');
+      move_box.setAttribute('fill','#1FCEB4');
+      move_box.setAttribute('rx',15);
+      move_box.setAttribute('ry',15);
+      move_box.onclick = function(){
+        location.href = "stage_2.html";
+      };
+      svg1.appendChild(move_box);
+
+      const move_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      move_text.setAttribute('x','100');
+      move_text.setAttribute('y','280');
+      move_text.setAttribute('font-size',"20px");
+      move_text.setAttribute('fill',"white");
+      move_text.setAttribute('font-family',"Verdana");
+      move_text.onclick = function(){
+        location.href = "stage_2.html";
+      };
+      move_text.textContent='次のステージへ';
+      svg1.appendChild(move_text);
+
+      move_box.onmouseover = changeHoverColor;
+      move_box.onmouseout = changeDefaultColor;
+      move_text.onmouseover = changeHoverColor;
+
+
+      function changeHoverColor() {
+          move_box.setAttribute('fill', 'pink');
+      }
+      function changeDefaultColor() {
+          move_box.setAttribute('fill', '#1FCEB4');
+      }
+      //ステージ移動ボタン終わり
+    }
+
+
+  },1000);
+
+  //点数機能
+  const score_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  score_text.setAttribute('x','20');
+  score_text.setAttribute('y','50');
+  score_text.setAttribute('font-size',"15px");
+  score_text.setAttribute('font-family',"Verdana");
+  score_text.textContent='SCORE '+ String(score);
+  svg1.appendChild(score_text);
+
+  question(stage);
+
+  </script>
+</body>
+</html>

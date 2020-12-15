@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>stage_2 文の係り受け</title>
+  <style>
+  </style>
+  <svg id="svgField" width="100%" height="500" style="border:0px solid black">
+  </svg>
+</head>
+<body>
+
+  <script>
+  var stage = 0;
+  var score = 0;
+  const svg1=document.querySelector('#svgField');
+
+  const text = [["ここでは","にんじんや","たまねぎなどを","かいました。"],
+              ["おかあさんは","おはなを","もらいました。"],
+              ["ここが","わたしの","おうちです。"],
+              ["まどの","そとを","みてください。"],
+              ["ぼくは","さんじの","おやつを","たべました。"],
+              ["ともだちの","おとうさんが","テニスを","しています。"],
+              ["あなたは","わたしの","ともだちです。"],
+              ["ぼくの","フォークを","とってください。"],
+              ["あなたの","おじいちゃんは","おどりが","とくいです。"],
+              ["ボールを","むこうへ","なげかえしました。"]
+              ];
+  const answer = [[3,2,3,0],
+  [2,2,0],
+  [2,2,0],
+  [1,2,0],
+  [3,2,3,0],
+  [1,3,3,0],
+  [2,2,0],
+  [1,2,0],
+  [1,3,3,0],
+  [2,2,0]
+  ];
+
+  var start_goal=[100,100];
+
+
+  //矢印のスタート生成
+  function arrow_1(start_x){
+    let line_x0 = start_x+5;
+    let line_y0 = 130;
+    let line_x1 = start_x+5;
+    let line_y1 = 120;
+    let line_x2 = start_x+20;
+    let line_y2 = 120;
+    let point_setting = String(line_x0)+','+String(line_y0)+' '+String(line_x1)+','+String(line_y1)+' '+String(line_x2)+','+String(line_y2);
+    let point_setting2 = String(line_x2-8)+','+String(line_y2-4)+' '+String(line_x2)+','+String(line_y2)+' '+String(line_x2-8)+','+String(line_y2+4);
+    const line=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    line.setAttribute('stroke','blue');
+    line.setAttribute('fill','None');
+    line.setAttribute('points',point_setting);
+    line.setAttribute('stroke-width','3px');
+    line.setAttribute('stroke-linejoin','round');//round or bevel
+    line.setAttribute('stroke-linecap','round');
+    const line2=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    line2.setAttribute('stroke','blue');
+    line2.setAttribute('fill','blue');
+    line2.setAttribute('points',point_setting2);
+    line2.setAttribute('stroke-width','3px');
+    line2.setAttribute('stroke-linejoin','round');//round or bevel
+    line2.setAttribute('stroke-linecap','round');
+    svg1.appendChild(line);
+    svg1.appendChild(line2);
+  }
+  //ゴールを含む矢印生成
+  function arrow_2(start_x,goal_x,height){
+    let line_x0 = start_x+5;
+    let line_y0 = 130;
+    let line_x1 = start_x+5;
+    let line_y1 = 120-height;
+    let line_x2 = goal_x-5;
+    let line_y2 = 120-height;
+    let line_x3 = goal_x-5;
+    let line_y3 = 130;
+    let point_setting = String(line_x0)+','+String(line_y0)+' '+String(line_x1)+','+String(line_y1)+' '+String(line_x2)+','+String(line_y2)+' '+String(line_x3)+','+String(line_y3);
+    let point_setting2 = String(line_x3-4)+','+String(line_y3-8)+' '+String(line_x3)+','+String(line_y3)+' '+String(line_x3+4)+','+String(line_y3-8);
+    const line3=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    line3.setAttribute('stroke','blue');
+    line3.setAttribute('fill','None');
+    line3.setAttribute('points',point_setting);
+    line3.setAttribute('stroke-width','3px');
+    line3.setAttribute('stroke-linejoin','round');//round or bevel
+    line3.setAttribute('stroke-linecap','round');
+    line3.setAttribute('id','arrow');
+    const line4=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    line4.setAttribute('stroke','blue');
+    line4.setAttribute('fill','blue');
+    line4.setAttribute('points',point_setting2);
+    line4.setAttribute('stroke-width','3px');
+    line4.setAttribute('stroke-linejoin','round');//round or bevel
+    line4.setAttribute('stroke-linecap','round');
+    line4.setAttribute('id','arrow');
+    svg1.appendChild(line3);
+    svg1.appendChild(line4);
+  }
+
+  //矢印全部消す
+  function delete_arrow(){
+    while(svg1.lastChild.id=='arrow'){
+      svg1.removeChild(svg1.lastChild);
+    }
+  }
+
+  function question(stage){
+    var box=[];
+    var click_1=[];
+    var text_center=[];//テキストボックスの中心位置
+    var text_1=text[stage];
+    var text_length_1=text_1.length;
+    var answer_1=answer[stage];
+    for(var i=0;i<text_length_1;i++){
+      click_1[i]=0;
+      text_center[i]=0;
+    }
+
+    //×生成
+    const cross1_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    cross1_1.setAttribute('x1',(text_center[0]+text_center[text_length_1-1])/2-20);
+    cross1_1.setAttribute('y1',122);
+    cross1_1.setAttribute('x2',(text_center[0]+text_center[text_length_1-1])/2+20);
+    cross1_1.setAttribute('y2',162);
+    cross1_1.setAttribute('stroke','royalblue');
+    cross1_1.setAttribute('stroke-width',10);
+    cross1_1.setAttribute('opacity',0);
+    const cross1_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    cross1_2.setAttribute('x1',(text_center[0]+text_center[text_length_1-1])/2+20);
+    cross1_2.setAttribute('y1',122);
+    cross1_2.setAttribute('x2',(text_center[0]+text_center[text_length_1-1])/2-20);
+    cross1_2.setAttribute('y2',162);
+    cross1_2.setAttribute('stroke','royalblue');
+    cross1_2.setAttribute('stroke-width',10);
+    cross1_2.setAttribute('opacity',0);
+    svg1.appendChild(cross1_1);
+    svg1.appendChild(cross1_2);
+
+    //debug
+    // const debug_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    // debug_text.setAttribute('x','30');
+    // debug_text.setAttribute('y','30');
+    // debug_text.setAttribute('font-size',"20px");
+    // debug_text.textContent=String(click_1);
+    // svg1.appendChild(debug_text);
+    //debug
+
+
+
+
+    //テキスト生成と配置※バーみたいな感じで生成する※クリック2という配列作る、ID付与して、そのIDを引き出す感じ？？※領域の閾値作って場合分けかなー
+    var text_end=20;
+    var swi = 0;
+    var start = 0;
+    var end = 0;
+    for(var j =0;j<text_length_1;j++){
+      text_center[j]=text_end + text_1[j].length*10
+      const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text1.setAttribute('x',text_end);
+      text1.setAttribute('id',j);
+      text_end += text_1[j].length*20+40;
+      text1.setAttribute('y',300/2);
+      text1.setAttribute('font-size',"20px");
+
+        //全矢印生成（繰り返し）、最初に全矢印削除/
+      function all_arrow(text_length){
+        delete_arrow();
+        for(var k=0;k<text_length;k++){
+          if(click_1[k]!=0){
+            arrow_2(text_center[k],text_center[click_1[k]],(click_1[k]-k)*5);
+          }
+        }
+      }
+      text1.onclick=function(){     //クリックしたときに起こること
+        cross1_1.setAttribute('opacity',0);
+        cross1_2.setAttribute('opacity',0);
+        if(swi==0){
+          start_goal[0]=parseInt(text1.getAttribute('id'));
+          if(start_goal[0]!=text_length_1-1){
+            //debug_text.textContent=String(start_goal)+'+'+String(click_1);
+            if(click_1[start_goal[0]]!=0){
+              click_1[start_goal[0]]=0;
+              all_arrow(text_length_1);
+              start_goal[0]=parseInt(text1.getAttribute('id'));
+              arrow_1(text_center[start_goal[0]]);
+              swi=1;
+            }
+            else{
+              arrow_1(text_center[start_goal[0]]);
+              swi=1;
+            }
+          }
+          //もう矢印出来てたら消す？？矢印全消しボタン？？
+        }
+        else{
+          start_goal[1]=parseInt(text1.getAttribute('id'));
+          svg1.removeChild(svg1.lastChild);
+          svg1.removeChild(svg1.lastChild);
+          //debug_text.textContent=String(start_goal);
+          if(start_goal[1]>start_goal[0]){
+            click_1[start_goal[0]]=start_goal[1];
+            //debug_text.textContent=String(start_goal)+String(click_1);
+            all_arrow(text_length_1);
+          }
+          swi=0;
+        }
+      };
+      text1.textContent=text_1[j];
+      svg1.appendChild(text1);
+    }
+
+    //×の位置調整
+    cross1_1.setAttribute('x1',(text_center[0]+text_center[text_length_1-1])/2-20);
+    cross1_1.setAttribute('x2',(text_center[0]+text_center[text_length_1-1])/2+20);
+    cross1_2.setAttribute('x1',(text_center[0]+text_center[text_length_1-1])/2+20);
+    cross1_2.setAttribute('x2',(text_center[0]+text_center[text_length_1-1])/2-20);
+
+    //採点機能
+    function check(){
+      for(var l=0;l<text_length_1;l++){
+        if(click_1[l]!=answer_1[l]){
+          cross1_1.setAttribute('opacity',1);
+          cross1_2.setAttribute('opacity',1);
+          circle1.setAttribute('opacity',0);
+          break;
+        }
+      }
+      if(l==text_length_1){
+        cross1_1.setAttribute('opacity',0);
+        cross1_2.setAttribute('opacity',0);
+  
+        //○を出す
+        let x0 = (text_center[0]+text_center[text_length_1-1])/2-20;
+        let y0 = 137;
+        let rx = 40; //x軸半径
+        let ry = 40; //y軸半径
+        let rad1 = Math.PI*3/2;
+        let rad2 = Math.PI*3/2;
+        let x1 = x0+rx*Math.cos(rad1); //始点
+        let y1 = y0-ry*Math.sin(rad1); //始点
+  
+        let start = 0; //傾き
+        let f1 = 0;  //0:180度以内の円　1:180度以上の円
+  
+        let f2 = 0;  //0:時計回り　1:反時計回り
+        let x2 = x0+rx*Math.cos(rad2); //終点
+        let y2 = y0-ry*Math.sin(rad2);  //終点
+        let arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+  
+        const ark1=document.createElementNS("http://www.w3.org/2000/svg", "path");
+        ark1.setAttribute('d',arc_setting);
+        ark1.setAttribute('stroke','#3cb371');
+        ark1.setAttribute('fill','None');
+        ark1.setAttribute('stroke-width','8px');
+        ark1.setAttribute('stroke-linecap','round');
+        svg1.appendChild(ark1);
+  
+        function draw_arc(rad){
+          if(rad1<=Math.PI/2*(-1)+0.15){
+            clearInterval(ID);
+            let line_x0 = x0-15;
+            let line_y0 = y0-3;
+            let line_x1 = x0;
+            let line_y1 = y0+15;
+            let line_x2 = x0+15;
+            let line_y2 = y0-12;
+            let point_setting = String(line_x0)+','+String(line_y0)+' '+String(line_x1)+','+String(line_y1)+' '+String(line_x2)+','+String(line_y2);
+            const line=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+            line.setAttribute('stroke','#3cb371');
+            line.setAttribute('fill','None');
+            line.setAttribute('points',point_setting);
+            line.setAttribute('stroke-width','8px');
+            line.setAttribute('stroke-linejoin','round');//round or bevel
+            line.setAttribute('stroke-linecap','round');
+            svg1.appendChild(line);
+            setTimeout(()=>{svg1.removeChild(line);svg1.removeChild(ark1);},1200)
+          }
+          rad1=rad
+          x1 = x0+rx*Math.cos(rad1); //始点
+          y1 = y0-ry*Math.sin(rad1); //始点
+          if(rad2-rad1>=Math.PI){
+            f1=1;
+          }
+          arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+  
+          ark1.setAttribute('d',arc_setting);
+  
+        }
+        var ID = setInterval(()=>{rad1-=0.1;draw_arc(rad1);},6);
+        //○を出す終わり
+  
+        score+=1;
+        score_text.textContent='SCORE '+ String(score);
+        //前の問題の要素を取り除く
+  
+        setTimeout(()=>{          
+          while (svg1.firstChild) {
+            svg1.removeChild(svg1.firstChild);
+          }
+          stage+=1;
+          stage%=10;
+          question(stage);
+          svg1.appendChild(score_text);
+          svg1.appendChild(timer_text);
+                },1600)
+        //question(stage);
+      }
+    }
+
+    //採点ボックス生成
+    const box1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    box1.setAttribute('x',50);
+    box1.setAttribute('y',200);
+    box1.setAttribute('height','40');
+    box1.setAttribute('width','90');
+    box1.setAttribute('fill','#1FCEB4');
+    box1.setAttribute('rx',15);
+    box1.setAttribute('ry',15);
+    box1.onclick = function(){
+      check();
+    };
+    svg1.appendChild(box1);
+  
+    const saiten1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    saiten1.setAttribute('x',65);
+    saiten1.setAttribute('y',225);
+    saiten1.setAttribute('font-size',"15px");
+    saiten1.setAttribute('fill',"white");
+    saiten1.setAttribute('font-family',"Verdana");
+    saiten1.onclick = function(){
+      check();
+    };
+    saiten1.textContent='チェック';
+    svg1.appendChild(saiten1);
+
+  }
+
+  
+
+  
+  
+  
+  
+  //時計機能
+  const timer_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  timer_text.setAttribute('x','20');
+  timer_text.setAttribute('y','30');
+  timer_text.setAttribute('font-size',"15px");
+  timer_text.textContent='TIME 01:00';
+  timer_text.setAttribute('font-family',"Verdana");
+  svg1.appendChild(timer_text);
+  
+  var total_time = 61000; //残り時間5分
+  var old_time = Date.now();
+  
+  const timerId = setInterval(()=>{
+    const current_time = Date.now();
+    const diff = current_time-old_time;
+    old_time = current_time;
+    total_time = total_time - diff;
+    const remain_min = Math.floor(total_time / 60000);
+    const remain_sec = Math.floor((total_time - remain_min*60000) / 1000);
+    if(remain_sec<10){
+      timer_text.textContent='TIME 0'+String(remain_min)+':0'+String(remain_sec);
+    }
+    else{
+      timer_text.textContent='TIME 0'+String(remain_min)+':'+String(remain_sec);
+    }
+    if(total_time<=0){
+      clearInterval(timerId);
+      //TimeUp表示
+      const timeup_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      timeup_box.setAttribute('x','0');
+      timeup_box.setAttribute('y','100');
+      timeup_box.setAttribute('height','150');
+      timeup_box.setAttribute('width','100%');
+      timeup_box.setAttribute('fill','white');
+      svg1.appendChild(timeup_box);
+  
+      const timeup_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      timeup_text.setAttribute('x','100');
+      timeup_text.setAttribute('y','150');
+      timeup_text.setAttribute('font-size',"30px");
+      timeup_text.setAttribute('fill',"pink");
+      timeup_text.setAttribute('font-family',"Verdana");
+      timeup_text.textContent='TIME UP!';
+      svg1.appendChild(timeup_text);
+  
+  
+      //ステージ移動ボタン生成
+      const move_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      move_box.setAttribute('x','70');
+      move_box.setAttribute('y','240');
+      move_box.setAttribute('height','70');
+      move_box.setAttribute('width','200');
+      move_box.setAttribute('fill','#1FCEB4');
+      move_box.setAttribute('rx',15);
+      move_box.setAttribute('ry',15);
+      move_box.onclick = function(){
+        location.href = "stage_2.html";
+      };
+      svg1.appendChild(move_box);
+  
+      const move_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      move_text.setAttribute('x','100');
+      move_text.setAttribute('y','280');
+      move_text.setAttribute('font-size',"20px");
+      move_text.setAttribute('fill',"white");
+      move_text.setAttribute('font-family',"Verdana");
+      move_text.onclick = function(){
+        location.href = "stage_2.html";
+      };
+      move_text.textContent='次のステージへ';
+      svg1.appendChild(move_text);
+  
+      move_box.onmouseover = changeHoverColor;
+      move_box.onmouseout = changeDefaultColor;
+      move_text.onmouseover = changeHoverColor;
+  
+  
+      function changeHoverColor() {
+          move_box.setAttribute('fill', 'pink');
+      }
+      function changeDefaultColor() {
+          move_box.setAttribute('fill', '#1FCEB4');
+      }
+      //ステージ移動ボタン終わり
+    }
+  
+  
+  },1000);
+  
+  //点数機能
+  const score_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  score_text.setAttribute('x','20');
+  score_text.setAttribute('y','50');
+  score_text.setAttribute('font-size',"15px");
+  score_text.setAttribute('font-family',"Verdana");
+  score_text.textContent='SCORE '+ String(score);
+  svg1.appendChild(score_text);
+
+  question(stage);
+
+  </script>
+</body>
+</html>
