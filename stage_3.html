@@ -9,16 +9,16 @@
   </style>
   <svg id="svgField" width="100%" height="600" style="border:0px solid black">
   </svg>
-  <audio id="one" src="number_voice/one.mp3"></audio>
-  <audio id="two" src="number_voice/two.mp3"></audio>
-  <audio id="three" src="number_voice/three.mp3"></audio>
-  <audio id="four" src="number_voice/four.mp3"></audio>
-  <audio id="five" src="number_voice/five.mp3"></audio>
-  <audio id="six" src="number_voice/six.mp3"></audio>
-  <audio id="seven" src="number_voice/seven.mp3"></audio>
-  <audio id="eight" src="number_voice/eight.mp3"></audio>
-  <audio id="nine" src="number_voice/nine.mp3"></audio>
-  <audio id="zero" src="number_voice/zero.mp3"></audio>
+  <audio id="one" src="number_voice/one.m4a"></audio>
+  <audio id="two" src="number_voice/two.m4a"></audio>
+  <audio id="three" src="number_voice/three.m4a"></audio>
+  <audio id="four" src="number_voice/four.m4a"></audio>
+  <audio id="five" src="number_voice/five.m4a"></audio>
+  <audio id="six" src="number_voice/six.m4a"></audio>
+  <audio id="seven" src="number_voice/seven.m4a"></audio>
+  <audio id="eight" src="number_voice/eight.m4a"></audio>
+  <audio id="nine" src="number_voice/nine.m4a"></audio>
+  <audio id="zero" src="number_voice/zero.m4a"></audio>
 </head>
 <body>
 
@@ -780,7 +780,7 @@
       svg1.removeChild(play_triangle);
       for(var j=0;j<level;j++){  
         play_a_number(answer[j]);
-        await wait(1.2);
+        await wait(1);
       }
       svg1.appendChild(alert_circle);
       svg1.appendChild(alert_text);
