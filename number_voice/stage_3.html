@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>stage_3 ワーキングメモリと数</title>
+  <style>
+  </style>
+  <svg id="svgField" width="100%" height="600" style="border:0px solid black">
+  </svg>
+  <audio id="one" src="number_voice/one.mp3"></audio>
+  <audio id="two" src="number_voice/two.mp3"></audio>
+  <audio id="three" src="number_voice/three.mp3"></audio>
+  <audio id="four" src="number_voice/four.mp3"></audio>
+  <audio id="five" src="number_voice/five.mp3"></audio>
+  <audio id="six" src="number_voice/six.mp3"></audio>
+  <audio id="seven" src="number_voice/seven.mp3"></audio>
+  <audio id="eight" src="number_voice/eight.mp3"></audio>
+  <audio id="nine" src="number_voice/nine.mp3"></audio>
+  <audio id="zero" src="number_voice/zero.mp3"></audio>
+</head>
+<body>
+
+  <script>
+  var stage = 0;
+  var score = 0;
+  var level = 3;  //覚える数字の数
+  var give_up = 0; //連続ギブアップの数。2連続ギブアップでレベルを1下げる。その時累積ギブアップを0に戻す。
+  const svg1=document.querySelector('#svgField');
+  
+  const audio1 = document.querySelector('#one');
+  const audio2 = document.querySelector('#two');
+  const audio3 = document.querySelector('#three');
+  const audio4 = document.querySelector('#four');
+  const audio5 = document.querySelector('#five');
+  const audio6 = document.querySelector('#six');
+  const audio7 = document.querySelector('#seven');
+  const audio8 = document.querySelector('#eight');
+  const audio9 = document.querySelector('#nine');
+  const audio0 = document.querySelector('#zero');
+
+  audio1.muted = true;
+  audio2.muted = true;
+  audio3.muted = true;
+  audio4.muted = true;
+  audio5.muted = true;
+  audio6.muted = true;
+  audio7.muted = true;
+  audio8.muted = true;
+  audio9.muted = true;
+  audio0.muted = true;
+  audio1.play();
+  audio2.play();
+  audio3.play();
+  audio4.play();
+  audio5.play();
+  audio6.play();
+  audio7.play();
+  audio8.play();
+  audio8.play();
+  audio0.play(); 
+
+  var your_position=0;
+  var your_answer=[0,0,0,0,0,0,0,0,0,0];
+  var your_answer_text='';
+
+  //×生成
+  const cross1_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  cross1_1.setAttribute('x1',100);
+  cross1_1.setAttribute('y1',90);
+  cross1_1.setAttribute('x2',160);
+  cross1_1.setAttribute('y2',150);
+  cross1_1.setAttribute('stroke','cornflowerblue');
+  cross1_1.setAttribute('stroke-width',20);
+  const cross1_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  cross1_2.setAttribute('x1',160);
+  cross1_2.setAttribute('y1',90);
+  cross1_2.setAttribute('x2',100);
+  cross1_2.setAttribute('y2',150);
+  cross1_2.setAttribute('stroke','cornflowerblue');
+  cross1_2.setAttribute('stroke-width',20);
+
+  var dy = 30;
+
+  //数字ボタン生成
+  const number_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  number_box.setAttribute('x',30+15);
+  number_box.setAttribute('y',70+dy);
+  number_box.setAttribute('height','40');
+  number_box.setAttribute('width','170');
+  number_box.setAttribute('fill','white');
+  number_box.setAttribute('stroke','gray');
+
+  const your_number_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  your_number_text.setAttribute('x',35+15);
+  your_number_text.setAttribute('y',100+dy);
+  your_number_text.setAttribute('font-size',"25px");
+  your_number_text.setAttribute('fill',"gray");
+  your_number_text.setAttribute('font-family',"Verdana");
+  your_number_text.textContent=your_answer_text;
+
+  const number_button_1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_1.setAttribute('cx',50+25);
+  number_button_1.setAttribute('cy',150+dy);
+  number_button_1.setAttribute('r',20);
+  number_button_1.setAttribute('stroke','Gray');
+  number_button_1.setAttribute('stroke-width',1);
+  number_button_1.setAttribute('fill','White');
+  number_button_1.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=1;
+      your_position+=1;
+      your_answer_text+='1';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_1.setAttribute('x',50-4+25);
+  number_text_1.setAttribute('y',150+5+dy);
+  number_text_1.setAttribute('font-size',"16px");
+  number_text_1.setAttribute('fill',"Gray");
+  number_text_1.setAttribute('font-family',"Verdana");
+  number_text_1.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=1;
+      your_position+=1;
+      your_answer_text+='1';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_1.textContent='1';
+
+  number_button_1.onmouseover = function(){
+    number_button_1.setAttribute('fill','Gray');
+    number_text_1.setAttribute('fill','White');
+  };
+  number_button_1.onmouseout = function(){
+    number_button_1.setAttribute('fill','White');
+    number_text_1.setAttribute('fill','Gray');
+  };
+  number_text_1.onmouseover = function(){
+    number_button_1.setAttribute('fill','Gray');
+    number_text_1.setAttribute('fill','White');
+  };
+  //1終わり
+
+  const number_button_2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_2.setAttribute('cx',100+25);
+  number_button_2.setAttribute('cy',150+dy);
+  number_button_2.setAttribute('r',20);
+  number_button_2.setAttribute('stroke','Gray');
+  number_button_2.setAttribute('stroke-width',1);
+  number_button_2.setAttribute('fill','White');
+  number_button_2.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=2;
+      your_position+=1;
+      your_answer_text+='2';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_2.setAttribute('x',100-4+25);
+  number_text_2.setAttribute('y',150+5+dy);
+  number_text_2.setAttribute('font-size',"16px");
+  number_text_2.setAttribute('fill',"Gray");
+  number_text_2.setAttribute('font-family',"Verdana");
+  number_text_2.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=2;
+      your_position+=1;
+      your_answer_text+='2';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_2.textContent='2';
+
+  number_button_2.onmouseover = function(){
+    number_button_2.setAttribute('fill','Gray');
+    number_text_2.setAttribute('fill','White');
+  };
+  number_button_2.onmouseout = function(){
+    number_button_2.setAttribute('fill','White');
+    number_text_2.setAttribute('fill','Gray');
+  };
+  number_text_2.onmouseover = function(){
+    number_button_2.setAttribute('fill','Gray');
+    number_text_2.setAttribute('fill','White');
+  };
+  //2終わり
+
+  const number_button_3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_3.setAttribute('cx',150+25);
+  number_button_3.setAttribute('cy',150+dy);
+  number_button_3.setAttribute('r',20);
+  number_button_3.setAttribute('stroke','Gray');
+  number_button_3.setAttribute('stroke-width',1);
+  number_button_3.setAttribute('fill','White');
+  number_button_3.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=3;
+      your_position+=1;
+      your_answer_text+='3';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_3.setAttribute('x',150-4+25);
+  number_text_3.setAttribute('y',150+5+dy);
+  number_text_3.setAttribute('font-size',"16px");
+  number_text_3.setAttribute('fill',"Gray");
+  number_text_3.setAttribute('font-family',"Verdana");
+  number_text_3.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=3;
+      your_position+=1;
+      your_answer_text+='3';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_3.textContent='3';
+
+  number_button_3.onmouseover = function(){
+    number_button_3.setAttribute('fill','Gray');
+    number_text_3.setAttribute('fill','White');
+  };
+  number_button_3.onmouseout = function(){
+    number_button_3.setAttribute('fill','White');
+    number_text_3.setAttribute('fill','Gray');
+  };
+  number_text_3.onmouseover = function(){
+    number_button_3.setAttribute('fill','Gray');
+    number_text_3.setAttribute('fill','White');
+  };
+  //3終わり
+
+  const number_button_4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_4.setAttribute('cx',50+25);
+  number_button_4.setAttribute('cy',200+dy);
+  number_button_4.setAttribute('r',20);
+  number_button_4.setAttribute('stroke','Gray');
+  number_button_4.setAttribute('stroke-width',1);
+  number_button_4.setAttribute('fill','White');
+  number_button_4.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=4;
+      your_position+=1;
+      your_answer_text+='4';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_4 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_4.setAttribute('x',50-4+25);
+  number_text_4.setAttribute('y',200+5+dy);
+  number_text_4.setAttribute('font-size',"16px");
+  number_text_4.setAttribute('fill',"Gray");
+  number_text_4.setAttribute('font-family',"Verdana");
+  number_text_4.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=4;
+      your_position+=1;
+      your_answer_text+='4';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_4.textContent='4';
+
+  number_button_4.onmouseover = function(){
+    number_button_4.setAttribute('fill','Gray');
+    number_text_4.setAttribute('fill','White');
+  };
+  number_button_4.onmouseout = function(){
+    number_button_4.setAttribute('fill','White');
+    number_text_4.setAttribute('fill','Gray');
+  };
+  number_text_4.onmouseover = function(){
+    number_button_4.setAttribute('fill','Gray');
+    number_text_4.setAttribute('fill','White');
+  };
+  //4終わり
+
+  const number_button_5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_5.setAttribute('cx',100+25);
+  number_button_5.setAttribute('cy',200+dy);
+  number_button_5.setAttribute('r',20);
+  number_button_5.setAttribute('stroke','Gray');
+  number_button_5.setAttribute('stroke-width',1);
+  number_button_5.setAttribute('fill','White');
+  number_button_5.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=5;
+      your_position+=1;
+      your_answer_text+='5';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_5 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_5.setAttribute('x',100-4+25);
+  number_text_5.setAttribute('y',200+5+dy);
+  number_text_5.setAttribute('font-size',"16px");
+  number_text_5.setAttribute('fill',"Gray");
+  number_text_5.setAttribute('font-family',"Verdana");
+  number_text_5.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=5;
+      your_position+=1;
+      your_answer_text+='5';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_5.textContent='5';
+
+  number_button_5.onmouseover = function(){
+    number_button_5.setAttribute('fill','Gray');
+    number_text_5.setAttribute('fill','White');
+  };
+  number_button_5.onmouseout = function(){
+    number_button_5.setAttribute('fill','White');
+    number_text_5.setAttribute('fill','Gray');
+  };
+  number_text_5.onmouseover = function(){
+    number_button_5.setAttribute('fill','Gray');
+    number_text_5.setAttribute('fill','White');
+  };
+  //5終わり
+
+  const number_button_6 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_6.setAttribute('cx',150+25);
+  number_button_6.setAttribute('cy',200+dy);
+  number_button_6.setAttribute('r',20);
+  number_button_6.setAttribute('stroke','Gray');
+  number_button_6.setAttribute('stroke-width',1);
+  number_button_6.setAttribute('fill','White');
+  number_button_6.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=6;
+      your_position+=1;
+      your_answer_text+='6';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_6 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_6.setAttribute('x',150-4+25);
+  number_text_6.setAttribute('y',200+5+dy);
+  number_text_6.setAttribute('font-size',"16px");
+  number_text_6.setAttribute('fill',"Gray");
+  number_text_6.setAttribute('font-family',"Verdana");
+  number_text_6.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=6;
+      your_position+=1;
+      your_answer_text+='6';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_6.textContent='6';
+
+  number_button_6.onmouseover = function(){
+    number_button_6.setAttribute('fill','Gray');
+    number_text_6.setAttribute('fill','White');
+  };
+  number_button_6.onmouseout = function(){
+    number_button_6.setAttribute('fill','White');
+    number_text_6.setAttribute('fill','Gray');
+  };
+  number_text_6.onmouseover = function(){
+    number_button_6.setAttribute('fill','Gray');
+    number_text_6.setAttribute('fill','White');
+  };
+  //6終わり
+
+  const number_button_7 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_7.setAttribute('cx',50+25);
+  number_button_7.setAttribute('cy',250+dy);
+  number_button_7.setAttribute('r',20);
+  number_button_7.setAttribute('stroke','Gray');
+  number_button_7.setAttribute('stroke-width',1);
+  number_button_7.setAttribute('fill','White');
+  number_button_7.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=7;
+      your_position+=1;
+      your_answer_text+='7';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_7 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_7.setAttribute('x',50-4+25);
+  number_text_7.setAttribute('y',250+5+dy);
+  number_text_7.setAttribute('font-size',"16px");
+  number_text_7.setAttribute('fill',"Gray");
+  number_text_7.setAttribute('font-family',"Verdana");
+  number_text_7.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=7;
+      your_position+=1;
+      your_answer_text+='7';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_7.textContent='7';
+
+  number_button_7.onmouseover = function(){
+    number_button_7.setAttribute('fill','Gray');
+    number_text_7.setAttribute('fill','White');
+  };
+  number_button_7.onmouseout = function(){
+    number_button_7.setAttribute('fill','White');
+    number_text_7.setAttribute('fill','Gray');
+  };
+  number_text_7.onmouseover = function(){
+    number_button_7.setAttribute('fill','Gray');
+    number_text_7.setAttribute('fill','White');
+  };
+  //7終わり
+
+  const number_button_8 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_8.setAttribute('cx',100+25);
+  number_button_8.setAttribute('cy',250+dy);
+  number_button_8.setAttribute('r',20);
+  number_button_8.setAttribute('stroke','Gray');
+  number_button_8.setAttribute('stroke-width',1);
+  number_button_8.setAttribute('fill','White');
+  number_button_8.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=8;
+      your_position+=1;
+      your_answer_text+='8';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_8 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_8.setAttribute('x',100-4+25);
+  number_text_8.setAttribute('y',250+5+dy);
+  number_text_8.setAttribute('font-size',"16px");
+  number_text_8.setAttribute('fill',"Gray");
+  number_text_8.setAttribute('font-family',"Verdana");
+  number_text_8.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=8;
+      your_position+=1;
+      your_answer_text+='8';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_8.textContent='8';
+
+  number_button_8.onmouseover = function(){
+    number_button_8.setAttribute('fill','Gray');
+    number_text_8.setAttribute('fill','White');
+  };
+  number_button_8.onmouseout = function(){
+    number_button_8.setAttribute('fill','White');
+    number_text_8.setAttribute('fill','Gray');
+  };
+  number_text_8.onmouseover = function(){
+    number_button_8.setAttribute('fill','Gray');
+    number_text_8.setAttribute('fill','White');
+  };
+  //8終わり
+
+  const number_button_9 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_9.setAttribute('cx',150+25);
+  number_button_9.setAttribute('cy',250+dy);
+  number_button_9.setAttribute('r',20);
+  number_button_9.setAttribute('stroke','Gray');
+  number_button_9.setAttribute('stroke-width',1);
+  number_button_9.setAttribute('fill','White');
+  number_button_9.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=9;
+      your_position+=1;
+      your_answer_text+='9';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_9 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_9.setAttribute('x',150-4+25);
+  number_text_9.setAttribute('y',250+5+dy);
+  number_text_9.setAttribute('font-size',"16px");
+  number_text_9.setAttribute('fill',"Gray");
+  number_text_9.setAttribute('font-family',"Verdana");
+  number_text_9.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=9;
+      your_position+=1;
+      your_answer_text+='9';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_9.textContent='9';
+
+  number_button_9.onmouseover = function(){
+    number_button_9.setAttribute('fill','Gray');
+    number_text_9.setAttribute('fill','White');
+  };
+  number_button_9.onmouseout = function(){
+    number_button_9.setAttribute('fill','White');
+    number_text_9.setAttribute('fill','Gray');
+  };
+  number_text_9.onmouseover = function(){
+    number_button_9.setAttribute('fill','Gray');
+    number_text_9.setAttribute('fill','White');
+  };
+  //9終わり
+
+  const number_button_c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_c.setAttribute('cx',50+25);
+  number_button_c.setAttribute('cy',300+dy);
+  number_button_c.setAttribute('r',20);
+  number_button_c.setAttribute('stroke','Gray');
+  number_button_c.setAttribute('stroke-width',1);
+  number_button_c.setAttribute('fill','White');
+  number_button_c.onclick = function(){
+    your_answer=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+    your_position=0;
+    your_answer_text='';
+    your_number_text.textContent=your_answer_text;
+  };
+
+  const number_text_c = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_c.setAttribute('x',50-4+25);
+  number_text_c.setAttribute('y',300+5+dy);
+  number_text_c.setAttribute('font-size',"16px");
+  number_text_c.setAttribute('fill',"Gray");
+  number_text_c.setAttribute('font-family',"Verdana");
+  number_text_c.onclick = function(){    
+    your_answer=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+    your_position=0;
+    your_answer_text='';
+    your_number_text.textContent=your_answer_text;
+  };
+  number_text_c.textContent='C';
+
+  number_button_c.onmouseover = function(){
+    number_button_c.setAttribute('fill','Gray');
+    number_text_c.setAttribute('fill','White');
+  };
+  number_button_c.onmouseout = function(){
+    number_button_c.setAttribute('fill','White');
+    number_text_c.setAttribute('fill','Gray');
+  };
+  number_text_c.onmouseover = function(){
+    number_button_c.setAttribute('fill','Gray');
+    number_text_c.setAttribute('fill','White');
+  };
+  //c終わり
+
+  const number_button_0 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_0.setAttribute('cx',100+25);
+  number_button_0.setAttribute('cy',300+dy);
+  number_button_0.setAttribute('r',20);
+  number_button_0.setAttribute('stroke','Gray');
+  number_button_0.setAttribute('stroke-width',1);
+  number_button_0.setAttribute('fill','White');
+  number_button_0.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=0;
+      your_position+=1;
+      your_answer_text+='0';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+
+  const number_text_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_0.setAttribute('x',100-4+25);
+  number_text_0.setAttribute('y',300+5+dy);
+  number_text_0.setAttribute('font-size',"16px");
+  number_text_0.setAttribute('fill',"Gray");
+  number_text_0.setAttribute('font-family',"Verdana");
+  number_text_0.onclick = function(){
+    if(your_position<=9){
+      your_answer[your_position]=0;
+      your_position+=1;
+      your_answer_text+='0';
+      your_number_text.textContent=your_answer_text;
+    }
+  };
+  number_text_0.textContent='0';
+
+  number_button_0.onmouseover = function(){
+    number_button_0.setAttribute('fill','Gray');
+    number_text_0.setAttribute('fill','White');
+  };
+  number_button_0.onmouseout = function(){
+    number_button_0.setAttribute('fill','White');
+    number_text_0.setAttribute('fill','Gray');
+  };
+  number_text_0.onmouseover = function(){
+    number_button_0.setAttribute('fill','Gray');
+    number_text_0.setAttribute('fill','White');
+  };
+  //0終わり
+
+  const number_button_bs = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_bs.setAttribute('cx',150+25);
+  number_button_bs.setAttribute('cy',300+dy);
+  number_button_bs.setAttribute('r',20);
+  number_button_bs.setAttribute('stroke','Gray');
+  number_button_bs.setAttribute('stroke-width',1);
+  number_button_bs.setAttribute('fill','White');
+  number_button_bs.onclick = function(){
+    your_position-=1;
+    your_answer_text=your_answer_text.slice(0,your_position);
+    your_number_text.textContent=your_answer_text;
+    if(your_position<0){
+      your_position=0;
+    }
+  };
+
+  const number_text_bs = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_bs.setAttribute('x',150-4+25);
+  number_text_bs.setAttribute('y',300+5+dy);
+  number_text_bs.setAttribute('font-size',"16px");
+  number_text_bs.setAttribute('fill',"Gray");
+  number_text_bs.setAttribute('font-family',"Verdana");
+  number_text_bs.onclick = function(){
+    your_position-=1;
+    your_answer_text=your_answer_text.slice(0,your_position);
+    your_number_text.textContent=your_answer_text;
+    if(your_position<0){
+      your_position=0;
+    }
+  };
+  number_text_bs.textContent='←';
+
+  number_button_bs.onmouseover = function(){
+    number_button_bs.setAttribute('fill','Gray');
+    number_text_bs.setAttribute('fill','White');
+  };
+  number_button_bs.onmouseout = function(){
+    number_button_bs.setAttribute('fill','White');
+    number_text_bs.setAttribute('fill','Gray');
+  };
+  number_text_bs.onmouseover = function(){
+    number_button_bs.setAttribute('fill','Gray');
+    number_text_bs.setAttribute('fill','White');
+  };
+  //bs終わり
+
+  //数字ボタン生成終わり
+
+  function show_number_button(){
+    svg1.appendChild(number_box);
+    svg1.appendChild(your_number_text);
+    svg1.appendChild(number_button_1);
+    svg1.appendChild(number_text_1);
+    svg1.appendChild(number_button_2);
+    svg1.appendChild(number_text_2);
+    svg1.appendChild(number_button_3);
+    svg1.appendChild(number_text_3);
+    svg1.appendChild(number_button_4);
+    svg1.appendChild(number_text_4);
+    svg1.appendChild(number_button_5);
+    svg1.appendChild(number_text_5);
+    svg1.appendChild(number_button_6);
+    svg1.appendChild(number_text_6);
+    svg1.appendChild(number_button_7);
+    svg1.appendChild(number_text_7);
+    svg1.appendChild(number_button_8);
+    svg1.appendChild(number_text_8);
+    svg1.appendChild(number_button_9);
+    svg1.appendChild(number_text_9);
+    svg1.appendChild(number_button_c);
+    svg1.appendChild(number_text_c);
+    svg1.appendChild(number_button_0);
+    svg1.appendChild(number_text_0);
+    svg1.appendChild(number_button_bs);
+    svg1.appendChild(number_text_bs);
+  }
+
+  function remove_number_button(){
+    svg1.removeChild(number_box);
+    svg1.removeChild(your_number_text);
+    svg1.removeChild(number_button_1);
+    svg1.removeChild(number_text_1);
+    svg1.removeChild(number_button_2);
+    svg1.removeChild(number_text_2);
+    svg1.removeChild(number_button_3);
+    svg1.removeChild(number_text_3);
+    svg1.removeChild(number_button_4);
+    svg1.removeChild(number_text_4);
+    svg1.removeChild(number_button_5);
+    svg1.removeChild(number_text_5);
+    svg1.removeChild(number_button_6);
+    svg1.removeChild(number_text_6);
+    svg1.removeChild(number_button_7);
+    svg1.removeChild(number_text_7);
+    svg1.removeChild(number_button_8);
+    svg1.removeChild(number_text_8);
+    svg1.removeChild(number_button_9);
+    svg1.removeChild(number_text_9);
+    svg1.removeChild(number_button_c);
+    svg1.removeChild(number_text_c);
+    svg1.removeChild(number_button_0);
+    svg1.removeChild(number_text_0);
+    svg1.removeChild(number_button_bs);
+    svg1.removeChild(number_text_bs);
+  }
+
+  function play_a_number(num){
+    if(num==1){
+      audio1.play();
+    }
+    else if(num==2){      
+      audio2.play();
+    }
+    else if(num==3){
+      audio3.play();
+    }
+    else if(num==4){
+      audio4.play();
+    }
+    else if(num==5){
+      audio5.play();
+    }
+    else if(num==6){
+      audio6.play();
+    }
+    else if(num==7){
+      audio7.play();
+    }
+    else if(num==8){
+      audio8.play();
+    }
+    else if(num==9){
+      audio9.play();
+    }
+    else if(num==0){
+      audio0.play();
+    }
+  }
+
+  const wait = (sec) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(resolve, sec*1000);
+      //setTimeout(() => {reject(new Error("エラー！"))}, sec*1000);
+    });
+  };
+
+  async function show_cross(){
+      svg1.appendChild(cross1_1);
+      svg1.appendChild(cross1_2);
+      await wait(1.5);
+      svg1.removeChild(cross1_1);
+      svg1.removeChild(cross1_2);
+    }
+
+  function question(stage,level,give_up){
+    var box=[];   //入力ボックス作る
+    var answer=[];
+    var arr=[];
+    //初期化
+    your_position=0;
+    your_answer_text='';
+    your_answer=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+    your_number_text.textContent=your_answer_text;
+    
+
+    if(give_up==2){
+      level-=1;
+      if(level<3){
+        level=3;
+      }
+      give_up=0;
+    }
+
+    if(level>10){
+      level = 10;
+    }
+
+
+    for(var k=0;k<10;k++){
+      arr[k]=k;
+    }
+
+    var len0=10;
+
+    for(var i=0;i<level;i++){
+      var rndNum = Math.floor(Math.random()*len0);
+      answer[i] = arr[rndNum];
+      arr[rndNum] = arr[len0-1];
+      len0-=1;
+    }
+
+    score_text.textContent='SCORE '+ String(score);
+
+    async function play_numbers(){
+      audio1.muted = false;
+      audio2.muted = false;
+      audio3.muted = false;
+      audio4.muted = false;
+      audio5.muted = false;
+      audio6.muted = false;
+      audio7.muted = false;
+      audio8.muted = false;
+      audio9.muted = false;
+      audio0.muted = false;
+      svg1.removeChild(play_box);
+      // svg1.removeChild(play_text);
+      svg1.removeChild(play_triangle);
+      for(var j=0;j<level;j++){  
+        play_a_number(answer[j]);
+        await wait(1);
+      }
+      svg1.appendChild(alert_circle);
+      svg1.appendChild(alert_text);
+      await wait(20);
+      svg1.removeChild(alert_text);
+      svg1.removeChild(alert_circle);
+      show_number_button();
+      svg1.appendChild(box1);
+      svg1.appendChild(saiten1);
+    }
+
+    //音声再生ボックス生成
+    const play_box = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    play_box.setAttribute('cx',130);
+    play_box.setAttribute('cy',230);
+    play_box.setAttribute('r','60');
+    play_box.setAttribute('fill','tomato');
+    play_box.onclick = function(){
+      play_numbers();
+    };
+    svg1.appendChild(play_box);
+
+    const play_triangle = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    play_triangle.setAttribute('points','115,210 115,250 155,230');
+    play_triangle.setAttribute('fill','White');
+    play_triangle.onclick = function(){
+      play_numbers();
+    };
+    svg1.appendChild(play_triangle);
+  
+    const play_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    play_text.setAttribute('x',65);
+    play_text.setAttribute('y',245);
+    play_text.setAttribute('font-size',"15px");
+    play_text.setAttribute('fill',"white");
+    play_text.setAttribute('font-family',"Verdana");
+    play_text.onclick = function(){
+      play_numbers();
+    };
+    play_text.textContent='数字を聞く';
+    // svg1.appendChild(play_text);
+
+
+    //採点機能
+    function check(){
+      if(your_position!=level){
+        show_cross();
+        svg1.appendChild(give_up_box);
+        svg1.appendChild(give_up_text);      
+      }
+      for(var l=0;l<level;l++){
+        if(your_answer[l]!=answer[l]){
+          show_cross();
+          svg1.appendChild(give_up_box);
+          svg1.appendChild(give_up_text);      
+          break;
+        }
+      }
+      if(l==level && your_position==level){  
+        //○を出す
+        let x0 = 130;
+        let y0 = 230;
+        let rx = 40; //x軸半径
+        let ry = 40; //y軸半径
+        let rad1 = Math.PI*3/2;
+        let rad2 = Math.PI*3/2;
+        let x1 = x0+rx*Math.cos(rad1); //始点
+        let y1 = y0-ry*Math.sin(rad1); //始点
+  
+        let start = 0; //傾き
+        let f1 = 0;  //0:180度以内の円　1:180度以上の円
+  
+        let f2 = 0;  //0:時計回り　1:反時計回り
+        let x2 = x0+rx*Math.cos(rad2); //終点
+        let y2 = y0-ry*Math.sin(rad2);  //終点
+        let arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+  
+        const ark1=document.createElementNS("http://www.w3.org/2000/svg", "path");
+        ark1.setAttribute('d',arc_setting);
+        ark1.setAttribute('stroke','#3cb371');
+        ark1.setAttribute('fill','None');
+        ark1.setAttribute('stroke-width','8px');
+        ark1.setAttribute('stroke-linecap','round');
+        svg1.appendChild(ark1);
+  
+        function draw_arc(rad){
+          if(rad1<=Math.PI/2*(-1)+0.15){
+            clearInterval(ID);
+            let line_x0 = x0-15;
+            let line_y0 = y0-3;
+            let line_x1 = x0;
+            let line_y1 = y0+15;
+            let line_x2 = x0+15;
+            let line_y2 = y0-12;
+            let point_setting = String(line_x0)+','+String(line_y0)+' '+String(line_x1)+','+String(line_y1)+' '+String(line_x2)+','+String(line_y2);
+            const line=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+            line.setAttribute('stroke','#3cb371');
+            line.setAttribute('fill','None');
+            line.setAttribute('points',point_setting);
+            line.setAttribute('stroke-width','8px');
+            line.setAttribute('stroke-linejoin','round');//round or bevel
+            line.setAttribute('stroke-linecap','round');
+            svg1.appendChild(line);
+            setTimeout(()=>{svg1.removeChild(line);svg1.removeChild(ark1);},1200)
+          }
+          rad1=rad
+          x1 = x0+rx*Math.cos(rad1); //始点
+          y1 = y0-ry*Math.sin(rad1); //始点
+          if(rad2-rad1>=Math.PI){
+            f1=1;
+          }
+          arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+  
+          ark1.setAttribute('d',arc_setting);
+  
+        }
+        var ID = setInterval(()=>{rad1-=0.1;draw_arc(rad1);},6);
+        //○を出す終わり
+  
+        score+=level;
+        score_text.textContent='SCORE '+ String(score);
+        remove_number_button();
+        svg1.removeChild(box1);
+        svg1.removeChild(saiten1);
+        svg1.appendChild(give_up_box);
+        svg1.appendChild(give_up_text);
+        svg1.removeChild(give_up_box);
+        svg1.removeChild(give_up_text);
+
+        setTimeout(()=>{          
+          stage+=1;
+          stage%=10;
+          level+=1;
+          give_up=0;
+          question(stage,level,give_up);
+          svg1.appendChild(score_text);
+          svg1.appendChild(timer_text);
+                },1600)
+        //question(stage);
+      }
+    }
+    //採点ボックス生成
+    const box1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    box1.setAttribute('cx',75);
+    box1.setAttribute('cy',420);
+    box1.setAttribute('r','40');
+    box1.setAttribute('fill','#1FCEB4');
+    box1.onclick = function(){
+      check();
+    };
+    //svg1.appendChild(box1);
+
+    const saiten1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    saiten1.setAttribute('x',50);
+    saiten1.setAttribute('y',425);
+    saiten1.setAttribute('font-size',"13px");
+    saiten1.setAttribute('fill',"white");
+    saiten1.setAttribute('font-family',"Verdana");
+    saiten1.onclick = function(){
+      check();
+    };
+    saiten1.textContent='チェック';
+    //svg1.appendChild(saiten1);
+    
+    //ギブアップボックス生成
+    const give_up_box = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    give_up_box.setAttribute('cx',180);
+    give_up_box.setAttribute('cy',420);
+    give_up_box.setAttribute('fill','mediumorchid');
+    give_up_box.setAttribute('r',40);
+    give_up_box.onclick = function(){
+      give_up+=1;
+      remove_number_button();
+      svg1.removeChild(give_up_box);
+      svg1.removeChild(give_up_text);
+      svg1.removeChild(box1);
+      svg1.removeChild(saiten1);
+      question(stage,level,give_up);
+    };
+    //svg1.appendChild(give_up_box);
+
+    const give_up_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    give_up_text.setAttribute('x',148);
+    give_up_text.setAttribute('y',425);
+    give_up_text.setAttribute('font-size',"13px");
+    give_up_text.setAttribute('fill',"white");
+    give_up_text.setAttribute('font-family',"Verdana");
+    give_up_text.onclick = function(){
+      give_up+=1;
+      remove_number_button();
+      svg1.removeChild(give_up_box);
+      svg1.removeChild(give_up_text);
+      svg1.removeChild(box1);
+      svg1.removeChild(saiten1);
+      question(stage,level,give_up);
+    };
+    give_up_text.textContent='ギブアップ';
+    //svg1.appendChild(give_up_text);
+  }
+
+  //採点ボックスダミー生成
+  const box1_0 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  box1_0.setAttribute('cx',75);
+  box1_0.setAttribute('cy',420);
+  box1_0.setAttribute('r','40');
+  box1_0.setAttribute('stroke','#1FCEB4');
+  box1_0.setAttribute('stroke-width','1px');
+  box1_0.setAttribute('fill','white');
+  svg1.appendChild(box1_0);
+
+  const saiten1_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  saiten1_0.setAttribute('x',50);
+  saiten1_0.setAttribute('y',425);
+  saiten1_0.setAttribute('font-size',"13px");
+  saiten1_0.setAttribute('fill',"#1FCEB4");
+  saiten1_0.setAttribute('font-family',"Verdana");
+  saiten1_0.textContent='チェック';
+  //svg1.appendChild(saiten1_0);
+  
+  //ギブアップボックスダミー生成
+  const give_up_box_0 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  give_up_box_0.setAttribute('cx',180);
+  give_up_box_0.setAttribute('cy',420);
+  give_up_box_0.setAttribute('stroke','mediumorchid');
+  give_up_box_0.setAttribute('stroke-width','1');
+  give_up_box_0.setAttribute('fill','white');
+  give_up_box_0.setAttribute('r',40);
+  svg1.appendChild(give_up_box_0);
+
+  const give_up_text_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  give_up_text_0.setAttribute('x',148);
+  give_up_text_0.setAttribute('y',425);
+  give_up_text_0.setAttribute('font-size',"13px");
+  give_up_text_0.setAttribute('fill',"mediumorchid");
+  give_up_text_0.setAttribute('font-family',"Verdana");
+  give_up_text_0.textContent='ギブアップ';
+  //svg1.appendChild(give_up_text_0);
+
+
+
+
+  
+
+  
+  //時計機能
+  const timer_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  timer_text.setAttribute('x','20');
+  timer_text.setAttribute('y','30');
+  timer_text.setAttribute('font-size',"15px");
+  timer_text.textContent='TIME 05:00';
+  timer_text.setAttribute('font-family',"Verdana");
+  svg1.appendChild(timer_text);
+  
+  var total_time = 301000; //残り時間5分
+  var old_time = Date.now();
+  
+  const timerId = setInterval(()=>{
+    const current_time = Date.now();
+    const diff = current_time-old_time;
+    old_time = current_time;
+    total_time = total_time - diff;
+    const remain_min = Math.floor(total_time / 60000);
+    const remain_sec = Math.floor((total_time - remain_min*60000) / 1000);
+    if(remain_sec<10){
+      timer_text.textContent='TIME 0'+String(remain_min)+':0'+String(remain_sec);
+    }
+    else{
+      timer_text.textContent='TIME 0'+String(remain_min)+':'+String(remain_sec);
+    }
+    if(total_time<=0){
+      clearInterval(timerId);
+      //TimeUp表示
+      const timeup_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      timeup_box.setAttribute('x','0');
+      timeup_box.setAttribute('y','0');
+      timeup_box.setAttribute('height','550');
+      timeup_box.setAttribute('width','100%');
+      timeup_box.setAttribute('fill','white');
+      svg1.appendChild(timeup_box);
+  
+      const timeup_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      timeup_text.setAttribute('x','100');
+      timeup_text.setAttribute('y','150');
+      timeup_text.setAttribute('font-size',"30px");
+      timeup_text.setAttribute('fill',"pink");
+      timeup_text.setAttribute('font-family',"Verdana");
+      timeup_text.textContent='TIME UP!';
+      svg1.appendChild(timeup_text);
+  
+  
+      //ステージ移動ボタン生成
+      const move_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      move_box.setAttribute('x','70');
+      move_box.setAttribute('y','240');
+      move_box.setAttribute('height','70');
+      move_box.setAttribute('width','200');
+      move_box.setAttribute('fill','#1FCEB4');
+      move_box.setAttribute('rx',15);
+      move_box.setAttribute('ry',15);
+      move_box.onclick = function(){
+        location.href = "stage_3.html";
+      };
+      svg1.appendChild(move_box);
+  
+      const move_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      move_text.setAttribute('x','100');
+      move_text.setAttribute('y','280');
+      move_text.setAttribute('font-size',"20px");
+      move_text.setAttribute('fill',"white");
+      move_text.setAttribute('font-family',"Verdana");
+      move_text.onclick = function(){
+        location.href = "stage_3.html";
+      };
+      move_text.textContent='次のステージへ';
+      svg1.appendChild(move_text);
+  
+      move_box.onmouseover = changeHoverColor;
+      move_box.onmouseout = changeDefaultColor;
+      move_text.onmouseover = changeHoverColor;
+  
+  
+      function changeHoverColor() {
+          move_box.setAttribute('fill', 'pink');
+      }
+      function changeDefaultColor() {
+          move_box.setAttribute('fill', '#1FCEB4');
+      }
+      //ステージ移動ボタン終わり
+    }
+  
+  
+  },1000);
+  
+  //点数機能
+  const score_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  score_text.setAttribute('x','20');
+  score_text.setAttribute('y','50');
+  score_text.setAttribute('font-size',"15px");
+  score_text.setAttribute('font-family',"Verdana");
+  score_text.textContent='SCORE '+ String(score);
+  svg1.appendChild(score_text);
+
+  //注釈機能
+  const alert_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  alert_text.setAttribute('x','50');
+  alert_text.setAttribute('y','235');
+  alert_text.setAttribute('font-size',"15px");
+  alert_text.setAttribute('font-family',"Verdana");
+  alert_text.textContent='20びょうおぼえておこう';
+
+  const alert_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  alert_circle.setAttribute('cx',130);
+  alert_circle.setAttribute('cy',230);
+  alert_circle.setAttribute('r','110');
+  alert_circle.setAttribute('stroke','Gray');
+  alert_circle.setAttribute('stroke-width',1);
+  alert_circle.setAttribute('fill','white');
+
+
+  question(stage,level,give_up);
+
+  </script>
+</body>
+</html>
