@@ -44,26 +44,44 @@
   var your_answer=[0,0,0,0,0,0,0,0,0,0];
   var your_answer_text='';
 
+  //×生成
+  const cross1_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  cross1_1.setAttribute('x1',100);
+  cross1_1.setAttribute('y1',90);
+  cross1_1.setAttribute('x2',160);
+  cross1_1.setAttribute('y2',150);
+  cross1_1.setAttribute('stroke','cornflowerblue');
+  cross1_1.setAttribute('stroke-width',20);
+  const cross1_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  cross1_2.setAttribute('x1',160);
+  cross1_2.setAttribute('y1',90);
+  cross1_2.setAttribute('x2',100);
+  cross1_2.setAttribute('y2',150);
+  cross1_2.setAttribute('stroke','cornflowerblue');
+  cross1_2.setAttribute('stroke-width',20);
+
+  var dy = 30;
+
   //数字ボタン生成
   const number_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  number_box.setAttribute('x',30);
-  number_box.setAttribute('y',70);
+  number_box.setAttribute('x',30+15);
+  number_box.setAttribute('y',70+dy);
   number_box.setAttribute('height','40');
   number_box.setAttribute('width','170');
   number_box.setAttribute('fill','white');
   number_box.setAttribute('stroke','gray');
 
   const your_number_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  your_number_text.setAttribute('x',35);
-  your_number_text.setAttribute('y',100);
+  your_number_text.setAttribute('x',35+15);
+  your_number_text.setAttribute('y',100+dy);
   your_number_text.setAttribute('font-size',"25px");
   your_number_text.setAttribute('fill',"gray");
   your_number_text.setAttribute('font-family',"Verdana");
   your_number_text.textContent=your_answer_text;
 
   const number_button_1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_1.setAttribute('cx',50);
-  number_button_1.setAttribute('cy',150);
+  number_button_1.setAttribute('cx',50+25);
+  number_button_1.setAttribute('cy',150+dy);
   number_button_1.setAttribute('r',20);
   number_button_1.setAttribute('stroke','Gray');
   number_button_1.setAttribute('stroke-width',1);
@@ -78,8 +96,8 @@
   };
 
   const number_text_1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_1.setAttribute('x',50-4);
-  number_text_1.setAttribute('y',150+5);
+  number_text_1.setAttribute('x',50-4+25);
+  number_text_1.setAttribute('y',150+5+dy);
   number_text_1.setAttribute('font-size',"16px");
   number_text_1.setAttribute('fill',"Gray");
   number_text_1.setAttribute('font-family',"Verdana");
@@ -108,8 +126,8 @@
   //1終わり
 
   const number_button_2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_2.setAttribute('cx',100);
-  number_button_2.setAttribute('cy',150);
+  number_button_2.setAttribute('cx',100+25);
+  number_button_2.setAttribute('cy',150+dy);
   number_button_2.setAttribute('r',20);
   number_button_2.setAttribute('stroke','Gray');
   number_button_2.setAttribute('stroke-width',1);
@@ -124,8 +142,8 @@
   };
 
   const number_text_2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_2.setAttribute('x',100-4);
-  number_text_2.setAttribute('y',150+5);
+  number_text_2.setAttribute('x',100-4+25);
+  number_text_2.setAttribute('y',150+5+dy);
   number_text_2.setAttribute('font-size',"16px");
   number_text_2.setAttribute('fill',"Gray");
   number_text_2.setAttribute('font-family',"Verdana");
@@ -154,8 +172,8 @@
   //2終わり
 
   const number_button_3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_3.setAttribute('cx',150);
-  number_button_3.setAttribute('cy',150);
+  number_button_3.setAttribute('cx',150+25);
+  number_button_3.setAttribute('cy',150+dy);
   number_button_3.setAttribute('r',20);
   number_button_3.setAttribute('stroke','Gray');
   number_button_3.setAttribute('stroke-width',1);
@@ -170,8 +188,8 @@
   };
 
   const number_text_3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_3.setAttribute('x',150-4);
-  number_text_3.setAttribute('y',150+5);
+  number_text_3.setAttribute('x',150-4+25);
+  number_text_3.setAttribute('y',150+5+dy);
   number_text_3.setAttribute('font-size',"16px");
   number_text_3.setAttribute('fill',"Gray");
   number_text_3.setAttribute('font-family',"Verdana");
@@ -200,8 +218,8 @@
   //3終わり
 
   const number_button_4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_4.setAttribute('cx',50);
-  number_button_4.setAttribute('cy',200);
+  number_button_4.setAttribute('cx',50+25);
+  number_button_4.setAttribute('cy',200+dy);
   number_button_4.setAttribute('r',20);
   number_button_4.setAttribute('stroke','Gray');
   number_button_4.setAttribute('stroke-width',1);
@@ -216,8 +234,8 @@
   };
 
   const number_text_4 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_4.setAttribute('x',50-4);
-  number_text_4.setAttribute('y',200+5);
+  number_text_4.setAttribute('x',50-4+25);
+  number_text_4.setAttribute('y',200+5+dy);
   number_text_4.setAttribute('font-size',"16px");
   number_text_4.setAttribute('fill',"Gray");
   number_text_4.setAttribute('font-family',"Verdana");
@@ -246,8 +264,8 @@
   //4終わり
 
   const number_button_5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_5.setAttribute('cx',100);
-  number_button_5.setAttribute('cy',200);
+  number_button_5.setAttribute('cx',100+25);
+  number_button_5.setAttribute('cy',200+dy);
   number_button_5.setAttribute('r',20);
   number_button_5.setAttribute('stroke','Gray');
   number_button_5.setAttribute('stroke-width',1);
@@ -262,8 +280,8 @@
   };
 
   const number_text_5 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_5.setAttribute('x',100-4);
-  number_text_5.setAttribute('y',200+5);
+  number_text_5.setAttribute('x',100-4+25);
+  number_text_5.setAttribute('y',200+5+dy);
   number_text_5.setAttribute('font-size',"16px");
   number_text_5.setAttribute('fill',"Gray");
   number_text_5.setAttribute('font-family',"Verdana");
@@ -292,8 +310,8 @@
   //5終わり
 
   const number_button_6 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_6.setAttribute('cx',150);
-  number_button_6.setAttribute('cy',200);
+  number_button_6.setAttribute('cx',150+25);
+  number_button_6.setAttribute('cy',200+dy);
   number_button_6.setAttribute('r',20);
   number_button_6.setAttribute('stroke','Gray');
   number_button_6.setAttribute('stroke-width',1);
@@ -308,8 +326,8 @@
   };
 
   const number_text_6 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_6.setAttribute('x',150-4);
-  number_text_6.setAttribute('y',200+5);
+  number_text_6.setAttribute('x',150-4+25);
+  number_text_6.setAttribute('y',200+5+dy);
   number_text_6.setAttribute('font-size',"16px");
   number_text_6.setAttribute('fill',"Gray");
   number_text_6.setAttribute('font-family',"Verdana");
@@ -338,8 +356,8 @@
   //6終わり
 
   const number_button_7 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_7.setAttribute('cx',50);
-  number_button_7.setAttribute('cy',250);
+  number_button_7.setAttribute('cx',50+25);
+  number_button_7.setAttribute('cy',250+dy);
   number_button_7.setAttribute('r',20);
   number_button_7.setAttribute('stroke','Gray');
   number_button_7.setAttribute('stroke-width',1);
@@ -354,8 +372,8 @@
   };
 
   const number_text_7 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_7.setAttribute('x',50-4);
-  number_text_7.setAttribute('y',250+5);
+  number_text_7.setAttribute('x',50-4+25);
+  number_text_7.setAttribute('y',250+5+dy);
   number_text_7.setAttribute('font-size',"16px");
   number_text_7.setAttribute('fill',"Gray");
   number_text_7.setAttribute('font-family',"Verdana");
@@ -384,8 +402,8 @@
   //7終わり
 
   const number_button_8 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_8.setAttribute('cx',100);
-  number_button_8.setAttribute('cy',250);
+  number_button_8.setAttribute('cx',100+25);
+  number_button_8.setAttribute('cy',250+dy);
   number_button_8.setAttribute('r',20);
   number_button_8.setAttribute('stroke','Gray');
   number_button_8.setAttribute('stroke-width',1);
@@ -400,8 +418,8 @@
   };
 
   const number_text_8 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_8.setAttribute('x',100-4);
-  number_text_8.setAttribute('y',250+5);
+  number_text_8.setAttribute('x',100-4+25);
+  number_text_8.setAttribute('y',250+5+dy);
   number_text_8.setAttribute('font-size',"16px");
   number_text_8.setAttribute('fill',"Gray");
   number_text_8.setAttribute('font-family',"Verdana");
@@ -430,8 +448,8 @@
   //8終わり
 
   const number_button_9 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_9.setAttribute('cx',150);
-  number_button_9.setAttribute('cy',250);
+  number_button_9.setAttribute('cx',150+25);
+  number_button_9.setAttribute('cy',250+dy);
   number_button_9.setAttribute('r',20);
   number_button_9.setAttribute('stroke','Gray');
   number_button_9.setAttribute('stroke-width',1);
@@ -446,8 +464,8 @@
   };
 
   const number_text_9 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_9.setAttribute('x',150-4);
-  number_text_9.setAttribute('y',250+5);
+  number_text_9.setAttribute('x',150-4+25);
+  number_text_9.setAttribute('y',250+5+dy);
   number_text_9.setAttribute('font-size',"16px");
   number_text_9.setAttribute('fill',"Gray");
   number_text_9.setAttribute('font-family',"Verdana");
@@ -475,9 +493,51 @@
   };
   //9終わり
 
+  const number_button_c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  number_button_c.setAttribute('cx',50+25);
+  number_button_c.setAttribute('cy',300+dy);
+  number_button_c.setAttribute('r',20);
+  number_button_c.setAttribute('stroke','Gray');
+  number_button_c.setAttribute('stroke-width',1);
+  number_button_c.setAttribute('fill','White');
+  number_button_c.onclick = function(){
+    your_answer=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+    your_position=0;
+    your_answer_text='';
+    your_number_text.textContent=your_answer_text;
+  };
+
+  const number_text_c = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  number_text_c.setAttribute('x',50-4+25);
+  number_text_c.setAttribute('y',300+5+dy);
+  number_text_c.setAttribute('font-size',"16px");
+  number_text_c.setAttribute('fill',"Gray");
+  number_text_c.setAttribute('font-family',"Verdana");
+  number_text_c.onclick = function(){    
+    your_answer=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+    your_position=0;
+    your_answer_text='';
+    your_number_text.textContent=your_answer_text;
+  };
+  number_text_c.textContent='C';
+
+  number_button_c.onmouseover = function(){
+    number_button_c.setAttribute('fill','Gray');
+    number_text_c.setAttribute('fill','White');
+  };
+  number_button_c.onmouseout = function(){
+    number_button_c.setAttribute('fill','White');
+    number_text_c.setAttribute('fill','Gray');
+  };
+  number_text_c.onmouseover = function(){
+    number_button_c.setAttribute('fill','Gray');
+    number_text_c.setAttribute('fill','White');
+  };
+  //c終わり
+
   const number_button_0 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_0.setAttribute('cx',100);
-  number_button_0.setAttribute('cy',300);
+  number_button_0.setAttribute('cx',100+25);
+  number_button_0.setAttribute('cy',300+dy);
   number_button_0.setAttribute('r',20);
   number_button_0.setAttribute('stroke','Gray');
   number_button_0.setAttribute('stroke-width',1);
@@ -492,8 +552,8 @@
   };
 
   const number_text_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_0.setAttribute('x',100-4);
-  number_text_0.setAttribute('y',300+5);
+  number_text_0.setAttribute('x',100-4+25);
+  number_text_0.setAttribute('y',300+5+dy);
   number_text_0.setAttribute('font-size',"16px");
   number_text_0.setAttribute('fill',"Gray");
   number_text_0.setAttribute('font-family',"Verdana");
@@ -522,8 +582,8 @@
   //0終わり
 
   const number_button_bs = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  number_button_bs.setAttribute('cx',150);
-  number_button_bs.setAttribute('cy',300);
+  number_button_bs.setAttribute('cx',150+25);
+  number_button_bs.setAttribute('cy',300+dy);
   number_button_bs.setAttribute('r',20);
   number_button_bs.setAttribute('stroke','Gray');
   number_button_bs.setAttribute('stroke-width',1);
@@ -538,8 +598,8 @@
   };
 
   const number_text_bs = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  number_text_bs.setAttribute('x',150-4);
-  number_text_bs.setAttribute('y',300+5);
+  number_text_bs.setAttribute('x',150-4+25);
+  number_text_bs.setAttribute('y',300+5+dy);
   number_text_bs.setAttribute('font-size',"16px");
   number_text_bs.setAttribute('fill',"Gray");
   number_text_bs.setAttribute('font-family',"Verdana");
@@ -590,6 +650,8 @@
     svg1.appendChild(number_text_8);
     svg1.appendChild(number_button_9);
     svg1.appendChild(number_text_9);
+    svg1.appendChild(number_button_c);
+    svg1.appendChild(number_text_c);
     svg1.appendChild(number_button_0);
     svg1.appendChild(number_text_0);
     svg1.appendChild(number_button_bs);
@@ -617,6 +679,8 @@
     svg1.removeChild(number_text_8);
     svg1.removeChild(number_button_9);
     svg1.removeChild(number_text_9);
+    svg1.removeChild(number_button_c);
+    svg1.removeChild(number_text_c);
     svg1.removeChild(number_button_0);
     svg1.removeChild(number_text_0);
     svg1.removeChild(number_button_bs);
@@ -663,6 +727,14 @@
     });
   };
 
+  async function show_cross(){
+      svg1.appendChild(cross1_1);
+      svg1.appendChild(cross1_2);
+      await wait(1.5);
+      svg1.removeChild(cross1_1);
+      svg1.removeChild(cross1_2);
+    }
+
   function question(stage,level,give_up){
     var box=[];   //入力ボックス作る
     var answer=[];
@@ -670,8 +742,9 @@
     //初期化
     your_position=0;
     your_answer_text='';
-    your_answer=[0,0,0,0,0,0,0,0,0,0];
+    your_answer=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
     your_number_text.textContent=your_answer_text;
+    
 
     if(give_up==2){
       level-=1;
@@ -703,34 +776,44 @@
 
     async function play_numbers(){
       svg1.removeChild(play_box);
-      svg1.removeChild(play_text);
+      // svg1.removeChild(play_text);
+      svg1.removeChild(play_triangle);
       for(var j=0;j<level;j++){  
         play_a_number(answer[j]);
         await wait(1);
       }
+      svg1.appendChild(alert_circle);
       svg1.appendChild(alert_text);
       await wait(20);
       svg1.removeChild(alert_text);
+      svg1.removeChild(alert_circle);
       show_number_button();
+      svg1.appendChild(box1);
+      svg1.appendChild(saiten1);
     }
 
     //音声再生ボックス生成
-    const play_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    play_box.setAttribute('x',50);
-    play_box.setAttribute('y',300);
-    play_box.setAttribute('height','40');
-    play_box.setAttribute('width','105');
-    play_box.setAttribute('fill','#1FCEB4');
-    play_box.setAttribute('rx',15);
-    play_box.setAttribute('ry',15);
+    const play_box = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    play_box.setAttribute('cx',130);
+    play_box.setAttribute('cy',230);
+    play_box.setAttribute('r','60');
+    play_box.setAttribute('fill','tomato');
     play_box.onclick = function(){
       play_numbers();
     };
     svg1.appendChild(play_box);
+
+    const play_triangle = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    play_triangle.setAttribute('points','115,210 115,250 155,230');
+    play_triangle.setAttribute('fill','White');
+    play_triangle.onclick = function(){
+      play_numbers();
+    };
+    svg1.appendChild(play_triangle);
   
     const play_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
     play_text.setAttribute('x',65);
-    play_text.setAttribute('y',325);
+    play_text.setAttribute('y',245);
     play_text.setAttribute('font-size',"15px");
     play_text.setAttribute('fill',"white");
     play_text.setAttribute('font-family',"Verdana");
@@ -738,48 +821,28 @@
       play_numbers();
     };
     play_text.textContent='数字を聞く';
-    svg1.appendChild(play_text);
-
-    //×生成
-    const cross1_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    cross1_1.setAttribute('x1',50/2-20);
-    cross1_1.setAttribute('y1',122);
-    cross1_1.setAttribute('x2',50/2+20);
-    cross1_1.setAttribute('y2',162);
-    cross1_1.setAttribute('stroke','royalblue');
-    cross1_1.setAttribute('stroke-width',10);
-    cross1_1.setAttribute('opacity',0);
-    const cross1_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    cross1_2.setAttribute('x1',50/2+20);
-    cross1_2.setAttribute('y1',122);
-    cross1_2.setAttribute('x2',50/2-20);
-    cross1_2.setAttribute('y2',162);
-    cross1_2.setAttribute('stroke','royalblue');
-    cross1_2.setAttribute('stroke-width',10);
-    cross1_2.setAttribute('opacity',0);
-    svg1.appendChild(cross1_1);
-    svg1.appendChild(cross1_2);
-
-    
+    // svg1.appendChild(play_text);
 
 
     //採点機能
     function check(){
+      if(your_position!=level){
+        show_cross();
+        svg1.appendChild(give_up_box);
+        svg1.appendChild(give_up_text);      
+      }
       for(var l=0;l<level;l++){
         if(your_answer[l]!=answer[l]){
-          cross1_1.setAttribute('opacity',1);
-          cross1_2.setAttribute('opacity',1);
-          circle1.setAttribute('opacity',0);
+          show_cross();
+          svg1.appendChild(give_up_box);
+          svg1.appendChild(give_up_text);      
           break;
         }
       }
-      if(l==level){
-        cross1_1.setAttribute('opacity',0);
-        cross1_2.setAttribute('opacity',0);
-  
+      if(l==level && your_position==level){  
         //○を出す
-        let x0 = 50;
-        let y0 = 137;
+        let x0 = 130;
+        let y0 = 230;
         let rx = 40; //x軸半径
         let ry = 40; //y軸半径
         let rad1 = Math.PI*3/2;
@@ -837,9 +900,15 @@
         var ID = setInterval(()=>{rad1-=0.1;draw_arc(rad1);},6);
         //○を出す終わり
   
-        score+=1;
+        score+=level;
         score_text.textContent='SCORE '+ String(score);
         remove_number_button();
+        svg1.removeChild(box1);
+        svg1.removeChild(saiten1);
+        svg1.appendChild(give_up_box);
+        svg1.appendChild(give_up_text);
+        svg1.removeChild(give_up_box);
+        svg1.removeChild(give_up_text);
 
         setTimeout(()=>{          
           stage+=1;
@@ -854,65 +923,102 @@
       }
     }
     //採点ボックス生成
-    const box1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    box1.setAttribute('x',50);
-    box1.setAttribute('y',400);
-    box1.setAttribute('height','40');
-    box1.setAttribute('width','90');
+    const box1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    box1.setAttribute('cx',75);
+    box1.setAttribute('cy',420);
+    box1.setAttribute('r','40');
     box1.setAttribute('fill','#1FCEB4');
-    box1.setAttribute('rx',15);
-    box1.setAttribute('ry',15);
     box1.onclick = function(){
       check();
     };
-    svg1.appendChild(box1);
+    //svg1.appendChild(box1);
 
     const saiten1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    saiten1.setAttribute('x',65);
+    saiten1.setAttribute('x',50);
     saiten1.setAttribute('y',425);
-    saiten1.setAttribute('font-size',"15px");
+    saiten1.setAttribute('font-size',"13px");
     saiten1.setAttribute('fill',"white");
     saiten1.setAttribute('font-family',"Verdana");
     saiten1.onclick = function(){
       check();
     };
     saiten1.textContent='チェック';
-    svg1.appendChild(saiten1);
+    //svg1.appendChild(saiten1);
     
     //ギブアップボックス生成
-    const give_up_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    give_up_box.setAttribute('x',50);
-    give_up_box.setAttribute('y',500);
-    give_up_box.setAttribute('height','40');
-    give_up_box.setAttribute('width','110');
-    give_up_box.setAttribute('fill','#1FCEB4');
-    give_up_box.setAttribute('rx',15);
-    give_up_box.setAttribute('ry',15);
+    const give_up_box = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    give_up_box.setAttribute('cx',180);
+    give_up_box.setAttribute('cy',420);
+    give_up_box.setAttribute('fill','mediumorchid');
+    give_up_box.setAttribute('r',40);
     give_up_box.onclick = function(){
       give_up+=1;
-      cross1_1.setAttribute('opacity',0);
-      cross1_2.setAttribute('opacity',0);
       remove_number_button();
+      svg1.removeChild(give_up_box);
+      svg1.removeChild(give_up_text);
+      svg1.removeChild(box1);
+      svg1.removeChild(saiten1);
       question(stage,level,give_up);
     };
-    svg1.appendChild(give_up_box);
+    //svg1.appendChild(give_up_box);
 
     const give_up_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    give_up_text.setAttribute('x',65);
-    give_up_text.setAttribute('y',525);
-    give_up_text.setAttribute('font-size',"15px");
+    give_up_text.setAttribute('x',148);
+    give_up_text.setAttribute('y',425);
+    give_up_text.setAttribute('font-size',"13px");
     give_up_text.setAttribute('fill',"white");
     give_up_text.setAttribute('font-family',"Verdana");
     give_up_text.onclick = function(){
       give_up+=1;
-      cross1_1.setAttribute('opacity',0);
-      cross1_2.setAttribute('opacity',0);
       remove_number_button();
+      svg1.removeChild(give_up_box);
+      svg1.removeChild(give_up_text);
+      svg1.removeChild(box1);
+      svg1.removeChild(saiten1);
       question(stage,level,give_up);
     };
     give_up_text.textContent='ギブアップ';
-    svg1.appendChild(give_up_text);
+    //svg1.appendChild(give_up_text);
   }
+
+  //採点ボックスダミー生成
+  const box1_0 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  box1_0.setAttribute('cx',75);
+  box1_0.setAttribute('cy',420);
+  box1_0.setAttribute('r','40');
+  box1_0.setAttribute('stroke','#1FCEB4');
+  box1_0.setAttribute('stroke-width','1px');
+  box1_0.setAttribute('fill','white');
+  svg1.appendChild(box1_0);
+
+  const saiten1_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  saiten1_0.setAttribute('x',50);
+  saiten1_0.setAttribute('y',425);
+  saiten1_0.setAttribute('font-size',"13px");
+  saiten1_0.setAttribute('fill',"#1FCEB4");
+  saiten1_0.setAttribute('font-family',"Verdana");
+  saiten1_0.textContent='チェック';
+  //svg1.appendChild(saiten1_0);
+  
+  //ギブアップボックスダミー生成
+  const give_up_box_0 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  give_up_box_0.setAttribute('cx',180);
+  give_up_box_0.setAttribute('cy',420);
+  give_up_box_0.setAttribute('stroke','mediumorchid');
+  give_up_box_0.setAttribute('stroke-width','1');
+  give_up_box_0.setAttribute('fill','white');
+  give_up_box_0.setAttribute('r',40);
+  svg1.appendChild(give_up_box_0);
+
+  const give_up_text_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  give_up_text_0.setAttribute('x',148);
+  give_up_text_0.setAttribute('y',425);
+  give_up_text_0.setAttribute('font-size',"13px");
+  give_up_text_0.setAttribute('fill',"mediumorchid");
+  give_up_text_0.setAttribute('font-family',"Verdana");
+  give_up_text_0.textContent='ギブアップ';
+  //svg1.appendChild(give_up_text_0);
+
 
 
 
@@ -924,7 +1030,7 @@
   timer_text.setAttribute('x','20');
   timer_text.setAttribute('y','30');
   timer_text.setAttribute('font-size',"15px");
-  timer_text.textContent='TIME 01:00';
+  timer_text.textContent='TIME 05:00';
   timer_text.setAttribute('font-family',"Verdana");
   svg1.appendChild(timer_text);
   
@@ -949,7 +1055,7 @@
       //TimeUp表示
       const timeup_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       timeup_box.setAttribute('x','0');
-      timeup_box.setAttribute('y','100');
+      timeup_box.setAttribute('y','0');
       timeup_box.setAttribute('height','550');
       timeup_box.setAttribute('width','100%');
       timeup_box.setAttribute('fill','white');
@@ -975,7 +1081,7 @@
       move_box.setAttribute('rx',15);
       move_box.setAttribute('ry',15);
       move_box.onclick = function(){
-        location.href = "stage_2.html";
+        location.href = "stage_3.html";
       };
       svg1.appendChild(move_box);
   
@@ -986,7 +1092,7 @@
       move_text.setAttribute('fill',"white");
       move_text.setAttribute('font-family',"Verdana");
       move_text.onclick = function(){
-        location.href = "stage_2.html";
+        location.href = "stage_3.html";
       };
       move_text.textContent='次のステージへ';
       svg1.appendChild(move_text);
@@ -1020,10 +1126,19 @@
   //注釈機能
   const alert_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
   alert_text.setAttribute('x','50');
-  alert_text.setAttribute('y','300');
+  alert_text.setAttribute('y','235');
   alert_text.setAttribute('font-size',"15px");
   alert_text.setAttribute('font-family',"Verdana");
   alert_text.textContent='20びょうおぼえておこう';
+
+  const alert_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  alert_circle.setAttribute('cx',130);
+  alert_circle.setAttribute('cy',230);
+  alert_circle.setAttribute('r','110');
+  alert_circle.setAttribute('stroke','Gray');
+  alert_circle.setAttribute('stroke-width',1);
+  alert_circle.setAttribute('fill','white');
+
 
   question(stage,level,give_up);
 
