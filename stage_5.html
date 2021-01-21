@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>stage_5 一単語解答（述語→主語）</title>
+  <style>
+  </style>
+  <svg id="svgField" width="100%" height="500" style="border:0px solid black">
+  </svg>
+</head>
+<body>
+
+  <script>
+  var stage = 0;
+  var score = 0;
+  const svg1=document.querySelector('#svgField');
+
+  const text = [["絵の具の","色は","青です。"],
+              ["ゆたかくんは","けいすけくんを","おいかけました。"],
+              ["祖父の","背中は","とても","曲がっています。"],
+              ["チューリップは","タンポポよりも","5本","多いです。"],
+              ["4時間目の","授業は","楽しみにしていた","体育です。"],
+              ["すずめが","チュンチュン","ないています。"],
+              ["いちごは","さくらんぼより","4こ","多いです。"],
+              ["酸素によって","炎が","もえます。"],
+              ["この","マークは","図書館の","地図記号です。"],
+              ["Aは","Bで","Cしました。"]
+              ];
+  
+  //各問いの要素[0]=主語の位置、[1]=述語の位置、[2]=述語の形式（v=動詞現在形・未来形 p=動詞過去形 a=形容詞　n=名詞)
+  const answer = [[1,2,'n'],
+  [0,2,'p'],
+  [1,3,'a'],
+  [0,3,'a'],
+  [1,3,'n'],
+  [0,2,'v'],
+  [0,3,'a'],
+  [1,2,'v'],
+  [1,3,'n'],
+  [0,2,'p']
+  ];
+
+  //×生成
+  const cross1_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  cross1_1.setAttribute('x1',150);
+  cross1_1.setAttribute('y1',110);
+  cross1_1.setAttribute('x2',210);
+  cross1_1.setAttribute('y2',170);
+  cross1_1.setAttribute('stroke','cornflowerblue');
+  cross1_1.setAttribute('stroke-width',20);
+  const cross1_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  cross1_2.setAttribute('x1',210);
+  cross1_2.setAttribute('y1',110);
+  cross1_2.setAttribute('x2',150);
+  cross1_2.setAttribute('y2',170);
+  cross1_2.setAttribute('stroke','cornflowerblue');
+  cross1_2.setAttribute('stroke-width',20);
+
+  const wait = (sec) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(resolve, sec*1000);
+      //setTimeout(() => {reject(new Error("エラー！"))}, sec*1000);
+    });
+  };
+
+  async function show_cross(){
+      svg1.appendChild(cross1_1);
+      svg1.appendChild(cross1_2);
+      await wait(1.5);
+      svg1.removeChild(cross1_1);
+      svg1.removeChild(cross1_2);
+    }
+
+  function question(stage){
+    var your_answer=-1;
+    var text_1=text[stage];
+    var text_length_1=text_1.length;
+    var answer_1=answer[stage];
+    var text_head=[];
+    var question_text = 'sample';
+    var center_x = 180;
+
+    var sub_text_1 = text_1[answer_1[1]].substr(0,text_1[answer_1[1]].length-1);
+    question_text = "何（だれ）が"+sub_text_1+"か？";
+
+    var question_text_size = question_text.length*20;
+
+    const question_text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    question_text1.setAttribute('x',center_x-question_text_size/2);
+    question_text1.setAttribute('y',300/2);
+    question_text1.setAttribute('fill','Black');
+    question_text1.setAttribute('font-size',"20px");
+    question_text1.setAttribute('font-family',"Verdana");
+    question_text1.textContent = question_text;
+
+    const question_text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    question_text2.setAttribute('x',center_x-105);
+    question_text2.setAttribute('y',300/2+30);
+    question_text2.setAttribute('fill','Black');
+    question_text2.setAttribute('font-size',"10px");
+    question_text2.setAttribute('font-family',"Verdana");
+    question_text2.textContent = '答えが書いてあるところをタップして下さい。';
+
+    const question_text_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    question_text_circle.setAttribute('cx',center_x);
+    question_text_circle.setAttribute('cy',300/2-5);
+    question_text_circle.setAttribute('fill','white');
+    question_text_circle.setAttribute('stroke','mediumorchid');
+    question_text_circle.setAttribute('r',Math.max(question_text_size/2+10,120));
+
+    const question_text_rectangle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    question_text_rectangle.setAttribute('x','0');
+    question_text_rectangle.setAttribute('y','100');
+    question_text_rectangle.setAttribute('height','200');
+    question_text_rectangle.setAttribute('width','100%');
+    question_text_rectangle.setAttribute('fill','White');
+
+    async function show_question_text(){
+      svg1.appendChild(question_text_rectangle);
+      svg1.appendChild(question_text_circle);
+      svg1.appendChild(question_text1);
+      svg1.appendChild(question_text2);
+    }
+
+    for(var i =0;i<text_length_1+1;i++){
+      text_head[i]=0;
+    }
+
+    //テキスト生成と配置※バーみたいな感じで生成する※クリック2という配列作る、ID付与して、そのIDを引き出す感じ？？※領域の閾値作って場合分けかなー
+    var text_end=20;
+    var swi = 0;
+    text_head[0]=20;
+
+    const under_bar = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    under_bar.setAttribute('x1',0);
+    under_bar.setAttribute('y1',155);
+    under_bar.setAttribute('x2',0);
+    under_bar.setAttribute('y2',155);
+    under_bar.setAttribute('stroke',"Black");
+    under_bar.setAttribute('stroke-width',1);
+
+    for(var j =0;j<text_length_1;j++){
+      const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text1.setAttribute('x',text_end);
+      text1.setAttribute('id',j);
+      text_end += text_1[j].length*20+40;
+      text_head[j+1]=text_end;
+      text1.setAttribute('y',300/2);
+      text1.setAttribute('font-size',"20px");
+
+      text1.onclick=function(){     //クリックしたときに起こること
+        if(swi==0){
+          your_answer=parseInt(text1.getAttribute('id'));
+          under_bar.setAttribute('x1',text_head[your_answer]);
+          under_bar.setAttribute('x2',text_head[your_answer+1]-40);
+          svg1.appendChild(under_bar);
+          swi=1;
+        }
+        else{
+          svg1.removeChild(under_bar);
+          your_answer=-1;
+          swi=0;
+        }
+      };
+      text1.textContent=text_1[j];
+      svg1.appendChild(text1);
+    }
+
+    //採点機能
+    function check(){
+      if(your_answer!=answer_1[0]){
+        show_cross();     
+      }
+      else{  
+        //○を出す
+        let x0 = 180;
+        let y0 = 140;
+        let rx = 40; //x軸半径
+        let ry = 40; //y軸半径
+        let rad1 = Math.PI*3/2;
+        let rad2 = Math.PI*3/2;
+        let x1 = x0+rx*Math.cos(rad1); //始点
+        let y1 = y0-ry*Math.sin(rad1); //始点
+  
+        let start = 0; //傾き
+        let f1 = 0;  //0:180度以内の円　1:180度以上の円
+  
+        let f2 = 0;  //0:時計回り　1:反時計回り
+        let x2 = x0+rx*Math.cos(rad2); //終点
+        let y2 = y0-ry*Math.sin(rad2);  //終点
+        let arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+  
+        const ark1=document.createElementNS("http://www.w3.org/2000/svg", "path");
+        ark1.setAttribute('d',arc_setting);
+        ark1.setAttribute('stroke','#3cb371');
+        ark1.setAttribute('fill','None');
+        ark1.setAttribute('stroke-width','8px');
+        ark1.setAttribute('stroke-linecap','round');
+        svg1.appendChild(ark1);
+  
+        function draw_arc(rad){
+          if(rad1<=Math.PI/2*(-1)+0.15){
+            clearInterval(ID);
+            let line_x0 = x0-15;
+            let line_y0 = y0-3;
+            let line_x1 = x0;
+            let line_y1 = y0+15;
+            let line_x2 = x0+15;
+            let line_y2 = y0-12;
+            let point_setting = String(line_x0)+','+String(line_y0)+' '+String(line_x1)+','+String(line_y1)+' '+String(line_x2)+','+String(line_y2);
+            const line=document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+            line.setAttribute('stroke','#3cb371');
+            line.setAttribute('fill','None');
+            line.setAttribute('points',point_setting);
+            line.setAttribute('stroke-width','8px');
+            line.setAttribute('stroke-linejoin','round');//round or bevel
+            line.setAttribute('stroke-linecap','round');
+            svg1.appendChild(line);
+            setTimeout(()=>{svg1.removeChild(line);svg1.removeChild(ark1);},1200)
+          }
+          rad1=rad
+          x1 = x0+rx*Math.cos(rad1); //始点
+          y1 = y0-ry*Math.sin(rad1); //始点
+          if(rad2-rad1>=Math.PI){
+            f1=1;
+          }
+          arc_setting = 'M '+String(x1)+' '+String(y1)+' A '+String(rx)+' '+String(ry)+' '+String(start)+' '+String(f1)+' '+String(f2)+' '+String(x2)+' '+String(y2);
+  
+          ark1.setAttribute('d',arc_setting);
+  
+        }
+        var ID = setInterval(()=>{rad1-=0.1;draw_arc(rad1);},6);
+        //○を出す終わり
+  
+        score+=1;
+        score_text.textContent='SCORE '+ String(score);
+
+        if(total_time>2600){
+          setTimeout(()=>{   
+            while (svg1.firstChild) {
+              svg1.removeChild(svg1.firstChild);
+            }       
+            stage+=1;
+            stage%=10;
+            question(stage);
+            svg1.appendChild(score_text);
+            svg1.appendChild(timer_text);
+                  },1600)
+        }
+      }
+    }
+
+    //採点ボックス生成
+    const box1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    box1.setAttribute('cx',125);
+    box1.setAttribute('cy',320);
+    box1.setAttribute('r','40');
+    box1.setAttribute('fill','#1FCEB4');
+    box1.onclick = function(){
+      check();
+    };
+    svg1.appendChild(box1);
+
+    const saiten1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    saiten1.setAttribute('x',100);
+    saiten1.setAttribute('y',325);
+    saiten1.setAttribute('font-size',"13px");
+    saiten1.setAttribute('fill',"white");
+    saiten1.setAttribute('font-family',"Verdana");
+    saiten1.onclick = function(){
+      check();
+    };
+    saiten1.textContent='チェック';
+    svg1.appendChild(saiten1);
+
+    //問題消すボックス生成
+    const question_hide_box = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    question_hide_box.setAttribute('cx',230);
+    question_hide_box.setAttribute('cy',320);
+    question_hide_box.setAttribute('fill','gray');
+    question_hide_box.setAttribute('r',40);
+    question_hide_box.onclick = function(){
+      svg1.removeChild(question_hide_box);
+      svg1.removeChild(question_hide_box_text);
+      svg1.removeChild(question_text1);
+      svg1.removeChild(question_text2);
+      svg1.removeChild(question_text_circle);
+      svg1.removeChild(question_text_rectangle);
+    };
+    
+
+    const question_hide_box_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    question_hide_box_text.setAttribute('x',198);
+    question_hide_box_text.setAttribute('y',325);
+    question_hide_box_text.setAttribute('font-size',"13px");
+    question_hide_box_text.setAttribute('fill',"white");
+    question_hide_box_text.setAttribute('font-family',"Verdana");
+    question_hide_box_text.onclick = function(){
+      svg1.removeChild(question_hide_box);
+      svg1.removeChild(question_hide_box_text);
+      svg1.removeChild(question_text1);
+      svg1.removeChild(question_text2);
+      svg1.removeChild(question_text_circle);
+      svg1.removeChild(question_text_rectangle);
+    };
+    question_hide_box_text.textContent='問題を消す';
+    
+
+    //問題ボックス生成
+    const question_box = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    question_box.setAttribute('cx',230);
+    question_box.setAttribute('cy',320);
+    question_box.setAttribute('fill','mediumorchid');
+    question_box.setAttribute('r',40);
+    question_box.onclick = function(){
+      show_question_text();
+      svg1.appendChild(question_hide_box);
+      svg1.appendChild(question_hide_box_text);
+      svg1.removeChild(box1);
+      svg1.removeChild(saiten1);
+      svg1.appendChild(box1);
+      svg1.appendChild(saiten1);
+    };
+    svg1.appendChild(question_box);
+
+    const question_box_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    question_box_text.setAttribute('x',198);
+    question_box_text.setAttribute('y',325);
+    question_box_text.setAttribute('font-size',"13px");
+    question_box_text.setAttribute('fill',"white");
+    question_box_text.setAttribute('font-family',"Verdana");
+    question_box_text.onclick = function(){
+      show_question_text();
+      svg1.appendChild(question_hide_box);
+      svg1.appendChild(question_hide_box_text);
+      svg1.removeChild(box1);
+      svg1.removeChild(saiten1);
+      svg1.appendChild(box1);
+      svg1.appendChild(saiten1);
+    };
+    question_box_text.textContent='問題を見る';
+    svg1.appendChild(question_box_text);
+  }
+
+  
+  //時計機能
+  const timer_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  timer_text.setAttribute('x','20');
+  timer_text.setAttribute('y','30');
+  timer_text.setAttribute('font-size',"15px");
+  timer_text.textContent='TIME 01:00';
+  timer_text.setAttribute('font-family',"Verdana");
+  svg1.appendChild(timer_text);
+  
+  var total_time = 61000; //残り時間5分
+  var old_time = Date.now();
+  
+  const timerId = setInterval(()=>{
+    const current_time = Date.now();
+    const diff = current_time-old_time;
+    old_time = current_time;
+    total_time = total_time - diff;
+    const remain_min = Math.floor(total_time / 60000);
+    const remain_sec = Math.floor((total_time - remain_min*60000) / 1000);
+    if(remain_sec<10){
+      timer_text.textContent='TIME 0'+String(remain_min)+':0'+String(remain_sec);
+    }
+    else{
+      timer_text.textContent='TIME 0'+String(remain_min)+':'+String(remain_sec);
+    }
+    if(total_time<=1){
+      clearInterval(timerId);
+      //TimeUp表示
+      const timeup_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      timeup_box.setAttribute('x','0');
+      timeup_box.setAttribute('y','0');
+      timeup_box.setAttribute('height','100%');
+      timeup_box.setAttribute('width','100%');
+      timeup_box.setAttribute('fill','white');
+      svg1.appendChild(timeup_box);
+  
+      const timeup_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      timeup_text.setAttribute('x','100');
+      timeup_text.setAttribute('y','150');
+      timeup_text.setAttribute('font-size',"30px");
+      timeup_text.setAttribute('fill',"pink");
+      timeup_text.setAttribute('font-family',"Verdana");
+      timeup_text.textContent='TIME UP!';
+      svg1.appendChild(timeup_text);
+      svg1.appendChild(score_text);
+  
+  
+      //ステージ移動ボタン生成
+      const move_box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      move_box.setAttribute('x','70');
+      move_box.setAttribute('y','240');
+      move_box.setAttribute('height','70');
+      move_box.setAttribute('width','200');
+      move_box.setAttribute('fill','#1FCEB4');
+      move_box.setAttribute('rx',15);
+      move_box.setAttribute('ry',15);
+      move_box.onclick = function(){
+        location.href = "stage_3.html";
+      };
+      svg1.appendChild(move_box);
+  
+      const move_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      move_text.setAttribute('x','100');
+      move_text.setAttribute('y','280');
+      move_text.setAttribute('font-size',"20px");
+      move_text.setAttribute('fill',"white");
+      move_text.setAttribute('font-family',"Verdana");
+      move_text.onclick = function(){
+        location.href = "stage_6.html";
+      };
+      move_text.textContent='次のステージへ';
+      svg1.appendChild(move_text);
+  
+      move_box.onmouseover = changeHoverColor;
+      move_box.onmouseout = changeDefaultColor;
+      move_text.onmouseover = changeHoverColor;
+  
+  
+      function changeHoverColor() {
+          move_box.setAttribute('fill', 'pink');
+      }
+      function changeDefaultColor() {
+          move_box.setAttribute('fill', '#1FCEB4');
+      }
+      //ステージ移動ボタン終わり
+    }
+  
+  
+  },1000);
+  
+  //点数機能
+  const score_text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  score_text.setAttribute('x','20');
+  score_text.setAttribute('y','50');
+  score_text.setAttribute('font-size',"15px");
+  score_text.setAttribute('font-family',"Verdana");
+  score_text.textContent='SCORE '+ String(score);
+  svg1.appendChild(score_text);
+
+  question(stage);
+
+  </script>
+</body>
+</html>
